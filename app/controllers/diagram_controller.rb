@@ -1,17 +1,19 @@
 class DiagramController < Sinatra::Base
+    def initialize(app = nil)
+      super(app)
+      @diagram_generator = DiagramGenerator.new
+    end
+  
     post '/convert/sql/erb' do
       begin
         tempfile_sql = save_uploaded_file(params[:file][:tempfile])
-  
         colors = extract_colors(params)
-        erb_content = DiagramGenerator.new.generate_erb_from_sql(tempfile_sql.path, colors)
+        erb_content = @diagram_generator.generate_erb_from_sql(tempfile_sql.path, colors)
   
         content_type 'text/plain'
         erb_content
-      rescue => e
-        logger.error "Error processing SQL to ERB conversion: #{e.message}"
-        status 500
-        "Error converting SQL to ERB: #{e.message}"
+      rescue StandardError => e
+        handle_conversion_error(e, 'SQL to ERB')
       ensure
         tempfile_sql&.unlink
       end
@@ -21,18 +23,15 @@ class DiagramController < Sinatra::Base
       begin
         tempfile_sql = save_uploaded_file(params[:file][:tempfile])
         colors = extract_colors(params)
-  
-        erb_content = DiagramGenerator.new.generate_erb_from_sql(tempfile_sql.path, colors)
+        erb_content = @diagram_generator.generate_erb_from_sql(tempfile_sql.path, colors)
         tempfile_erb = Tempfile.new(['diagram', '.erb'])
-        File.open(tempfile_erb.path, 'wb') { |f| f.write(erb_content) }
   
-        png_file = DiagramGenerator.new.convert_erb_to_png(tempfile_erb.path)
+        File.open(tempfile_erb.path, 'wb') { |f| f.write(erb_content) }
+        png_file = @diagram_generator.convert_erb_to_png(tempfile_erb.path)
   
         send_file png_file, type: 'image/png', disposition: 'inline'
-      rescue => e
-        logger.error "Error processing conversion: #{e.message}"
-        status 500
-        "Error converting SQL to ERB and then to PNG: #{e.message}"
+      rescue StandardError => e
+        handle_conversion_error(e, 'ERB to PNG')
       ensure
         tempfile_sql&.close
         tempfile_sql&.unlink
@@ -59,6 +58,12 @@ class DiagramController < Sinatra::Base
         font_family: params[:font_family] || 'Arial',
         shadow: params[:shadow] == 'true'
       }
+    end
+  
+    def handle_conversion_error(exception, process)
+      logger.error "Error processing #{process} conversion: #{exception.message}"
+      status 500
+      "Error converting #{process}: #{exception.message}"
     end
   end
   
