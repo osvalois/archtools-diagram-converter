@@ -94,7 +94,6 @@
             </div>
             <dt class="mt-4 font-semibold text-white">Textos</dt>
             <div class="flex gap-4">
-
               <div class="rounded-full bg-white/5 p-2 ring-1 ring-white/10">
                 <div class="relative">
                   <label for="cellTextColor" id="cellTextCard"
@@ -153,11 +152,15 @@
         <h2 class="text-2xl font-semibold mb-4">Resultado del Diagrama</h2>
         <div id="resultContainer" class="text-center"></div>
         <div class="flex justify-center mt-6 space-x-4">
-          <button id="fullscreenButton" onclick="openFullscreen()"
+          <button id="fullscreenButton" 
             class="px-4 py-2 bg-blue-500 text-white rounded-lg shadow-sm hover:bg-blue-600 focus:outline-none">Ver en
             pantalla completa</button>
-          <button id="closeModalButton"
+          <button id="closeFullscreenButton"
             class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg shadow-sm hover:bg-gray-400 focus:outline-none">Cerrar Pantalla Completa</button>
+          
+          <button id="closeModalButton"
+            class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg shadow-sm hover:bg-gray-400 focus:outline-none">Cerrar Modal</button>
+            
         </div>
       </div>
     </div>
