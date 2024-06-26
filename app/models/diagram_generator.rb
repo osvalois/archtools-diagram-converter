@@ -34,19 +34,27 @@ class DiagramGenerator
     private
   
     def generate_erb_diagram(tables, relationships, colors)
-      <<~ERB
+      erb_content = <<~ERB
         digraph ER {
           graph [pad="0.5", nodesep="0.5", ranksep="1"]
           node [shape=plain, fontname="#{colors[:font_family]}"]
           rankdir=LR;
   
           // Definir nodos para las tablas
-          #{tables.keys.map { |table| generate_table_node(table, tables[table], colors) }.join("\n")}
+          #{generate_table_nodes(tables, colors)}
   
           // Definir relaciones entre las tablas
-          #{relationships.map { |rel| generate_relationship_edge(rel, colors[:relationship_color]) }.join("\n")}
+          #{generate_relationship_edges(relationships, colors)}
         }
       ERB
+  
+      erb_content
+    end
+  
+    def generate_table_nodes(tables, colors)
+      tables.map do |table, columns|
+        generate_table_node(table, columns, colors)
+      end.join("\n")
     end
   
     def generate_table_node(table, columns, colors)
@@ -58,8 +66,10 @@ class DiagramGenerator
       TABLE
     end
   
-    def generate_relationship_edge(rel, relationship_color)
-      "#{rel[:table_from]} -> #{rel[:table_to]} [label=\"#{rel[:column_from]} -> #{rel[:column_to]}\", arrowhead=open, color=\"#{relationship_color}\"];"
+    def generate_relationship_edges(relationships, colors)
+      relationships.map do |rel|
+        "#{rel[:table_from]}:#{rel[:column_from]} -> #{rel[:table_to]}:#{rel[:column_to]} [label=\"\", arrowhead=open, color=\"#{colors[:relationship_color]}\"];"
+      end.join("\n")
     end
   end
   
