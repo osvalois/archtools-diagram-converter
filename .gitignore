@@ -1,0 +1,32 @@
+# Ignore bundler config.
+/.bundle
+
+# Ignore the default SQLite database.
+/db/*.sqlite3
+
+# Ignore environment file.
+.env
+
+# Ignore any temporary files.
+/tmp
+
+# Ignore log files.
+/log/*.log
+
+# Ignore OS-specific files.
+.DS_Store
+Thumbs.db
+
+# Ignore Docker related files, if any.
+/docker-compose.yml
+/Dockerfile
+
+# Ignore any other generated files.
+/public/*.png
+/public/*.jpg
+
+# Ignore any editor backup files.
+*~
+
+# Ignore Gemfile.lock
+Gemfile.lock
