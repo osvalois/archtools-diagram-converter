@@ -1,0 +1,32 @@
+# flyctl launch added from vendor/bundle/ruby/2.6.0/gems/erb-2.2.3/.gitignore
+vendor/bundle/ruby/2.6.0/gems/erb-2.2.3/.bundle
+vendor/bundle/ruby/2.6.0/gems/erb-2.2.3/.yardoc
+vendor/bundle/ruby/2.6.0/gems/erb-2.2.3/_yardoc
+vendor/bundle/ruby/2.6.0/gems/erb-2.2.3/coverage
+vendor/bundle/ruby/2.6.0/gems/erb-2.2.3/doc
+vendor/bundle/ruby/2.6.0/gems/erb-2.2.3/pkg
+vendor/bundle/ruby/2.6.0/gems/erb-2.2.3/spec/reports
+vendor/bundle/ruby/2.6.0/gems/erb-2.2.3/tmp
+vendor/bundle/ruby/2.6.0/gems/erb-2.2.3/**/Gemfile.lock
+
+# flyctl launch added from vendor/bundle/ruby/2.6.0/gems/open3-0.2.1/.gitignore
+vendor/bundle/ruby/2.6.0/gems/open3-0.2.1/.bundle
+vendor/bundle/ruby/2.6.0/gems/open3-0.2.1/.yardoc
+vendor/bundle/ruby/2.6.0/gems/open3-0.2.1/_yardoc
+vendor/bundle/ruby/2.6.0/gems/open3-0.2.1/coverage
+vendor/bundle/ruby/2.6.0/gems/open3-0.2.1/doc
+vendor/bundle/ruby/2.6.0/gems/open3-0.2.1/pkg
+vendor/bundle/ruby/2.6.0/gems/open3-0.2.1/spec/reports
+vendor/bundle/ruby/2.6.0/gems/open3-0.2.1/tmp
+vendor/bundle/ruby/2.6.0/gems/open3-0.2.1/**/Gemfile.lock
+
+# flyctl launch added from vendor/bundle/ruby/2.6.0/gems/tempfile-0.2.1/.gitignore
+vendor/bundle/ruby/2.6.0/gems/tempfile-0.2.1/.bundle
+vendor/bundle/ruby/2.6.0/gems/tempfile-0.2.1/.yardoc
+vendor/bundle/ruby/2.6.0/gems/tempfile-0.2.1/_yardoc
+vendor/bundle/ruby/2.6.0/gems/tempfile-0.2.1/coverage
+vendor/bundle/ruby/2.6.0/gems/tempfile-0.2.1/doc
+vendor/bundle/ruby/2.6.0/gems/tempfile-0.2.1/pkg
+vendor/bundle/ruby/2.6.0/gems/tempfile-0.2.1/spec/reports
+vendor/bundle/ruby/2.6.0/gems/tempfile-0.2.1/tmp
+fly.toml

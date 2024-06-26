@@ -1,25 +1,36 @@
-# Utiliza una imagen base de Ruby
-FROM ruby:2.7
+# Define la versión de Ruby
+ARG RUBY_VERSION=2.6.10
+FROM ruby:$RUBY_VERSION-slim as base
 
-# Establece el directorio de trabajo dentro del contenedor
+# Directorio de trabajo para la aplicación
 WORKDIR /app
 
-# Copia el Gemfile y Gemfile.lock al contenedor
-COPY Gemfile Gemfile.lock ./
+# Actualiza las gemas y bundler
+RUN gem update --system --no-document && \
+    gem install -N bundler
 
-# Instala las dependencias de la aplicación
-RUN apt-get update && apt-get install -y \
-    graphviz \
- && rm -rf /var/lib/apt/lists/*
+# Copia el archivo Gemfile y Gemfile.lock
+COPY Gemfile* ./
 
-# Instala las gemas necesarias
-RUN gem install bundler && bundle install
+# Instala las gemas de la aplicación
+RUN bundle install --jobs $(nproc) --retry 3
 
-# Copia el resto de los archivos al contenedor
-COPY . .
+# Etapa final para la imagen de la aplicación
+FROM base
 
-# Expone el puerto que usará Sinatra
+# Crea y utiliza un usuario no root para los archivos de la aplicación por razones de seguridad
+RUN useradd -m -u 1000 ruby
+USER ruby
+
+# Copia los artefactos construidos: gemas y aplicación
+COPY --from=base --chown=ruby:ruby /usr/local/bundle /usr/local/bundle
+COPY --from=base --chown=ruby:ruby /app /app
+
+# Copia el código de la aplicación
+COPY --chown=ruby:ruby . .
+
+# Expone el puerto utilizado por la aplicación
 EXPOSE 4567
 
-# Comando para ejecutar la aplicación
-CMD ["bundle", "exec", "ruby", "app.rb"]
+# Comando para iniciar el servidor
+CMD ["bundle", "exec", "rackup", "--host", "0.0.0.0", "--port", "4567"]
