@@ -30,3 +30,6 @@ Thumbs.db
 
 # Ignore Gemfile.lock
 Gemfile.lock
+
+# Ignore vendor directory.
+/vendor/
