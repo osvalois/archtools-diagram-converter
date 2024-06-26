@@ -1,0 +1,75 @@
+body {
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  background-color: #2b2b2b; /* Darcula theme background color */
+  color: #a9b7c6; /* Darcula theme text color */
+}
+
+.container {
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #272822; /* Darcula theme container background color */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+}
+
+h1 {
+  text-align: center;
+  color: #f0f0f0; /* Darcula theme header text color */
+}
+
+button {
+  display: block;
+  margin: 10px auto;
+  padding: 10px 20px;
+  background-color: #5c99ff; /* Darcula theme button background color */
+  color: #ffffff; /* Darcula theme button text color */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #4682ea; /* Darcula theme button hover background color */
+}
+
+#resultContainer {
+  margin-top: 20px;
+  text-align: center;
+}
+
+#resultContainer img {
+  max-width: 100%;
+  height: auto;
+}
+
+.card {
+  padding: 20px;
+  margin: 10px;
+  border-radius: 5px;
+}
+
+.code-preview {
+  height: 300px;
+  overflow-y: scroll;
+  border: 1px solid #3b3b3b; /* Darcula theme border color */
+  background-color: #333333; /* Darcula theme code background color */
+  padding: 10px;
+  font-family: Menlo, Monaco, Consolas, 'Courier New', monospace; /* Darcula theme monospaced font */
+  font-size: 14px;
+  line-height: 1.6;
+  color: #a9b7c6; /* Darcula theme code text color */
+  white-space: pre-wrap;
+}
+
+.code-preview .sql-keyword {
+  color: #cc7832; /* Darcula theme SQL keyword color */
+}
+
+.code-preview .sql-string {
+  color: #6a8759; /* Darcula theme SQL string color */
+}
+
+.code-preview .sql-comment {
+  color: #808080; /* Darcula theme SQL comment color */
+  font-style: italic;
+}
