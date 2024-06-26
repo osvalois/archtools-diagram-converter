@@ -1,6 +1,7 @@
 # Variables
 APP_FILE = app.rb
 PORT = 4567
+RSPEC = bundle exec rspec
 
 # Targets
 all: run
@@ -11,9 +12,8 @@ install:
 run: install
 	bundle exec ruby $(APP_FILE) -o 0.0.0.0 -p $(PORT)
 
-test:
-	# Aquí podrías agregar comandos para correr tests, si los tuvieras
-	echo "No tests defined"
+test: install
+	$(RSPEC) --format documentation
 
 clean:
 	# Aquí podrías agregar comandos para limpiar archivos generados
