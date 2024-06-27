@@ -72,11 +72,16 @@ class DiagramGenerator
       TABLE
     end
   
-    def generate_relationship_edges(relationships, colors)
-      relationships.map do |rel|
-        "#{rel[:table_from].upcase}:#{rel[:column_from]} -> #{rel[:table_to].upcase}:#{rel[:column_to]} [label=\"\", arrowhead=open, color=\"#{colors[:relationship_color]}\"];"
-      end.join("\n")
-    end
+    def generate_relationship_edges(relationships, colors, line_style: 'dotted', line_width: 2)
+        relationships.map do |rel|
+          line_style_attr = "style=#{line_style}" if line_style && ['dotted', 'solid'].include?(line_style)
+          line_width_attr = "penwidth=#{line_width}" if line_width && line_width.is_a?(Numeric) && line_width.positive?
+      
+          line_attrs = [line_style_attr, line_width_attr].compact.join(', ')
+      
+          "#{rel[:table_from].upcase}:#{rel[:column_from]} -> #{rel[:table_to].upcase}:#{rel[:column_to]} [label=\"\", arrowhead=open, color=\"#{colors[:relationship_color]}\", #{line_attrs}];"
+        end.join("\n")
+      end            
   
     def col_type(column)
       type_part = column.split.last.downcase
