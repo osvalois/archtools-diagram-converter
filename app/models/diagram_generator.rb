@@ -1,4 +1,5 @@
 class DiagramGenerator
+  
     def generate_erb_from_sql(sql_file, colors)
       sql_content = File.read(sql_file)
       tables = SqlParser.new.parse_tables(sql_content)
@@ -22,7 +23,6 @@ class DiagramGenerator
         end
         output_file.path
       rescue => e
-        logger.error "Error in convert_erb_to_png: #{e.message}"
         raise e
       ensure
         tempfile_dot&.close
@@ -61,15 +61,53 @@ class DiagramGenerator
       <<~TABLE
         #{table} [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="10" bgcolor="#{colors[:table_bgcolor]}" #{'style=shadow' if colors[:shadow]}>
         <tr><td colspan="2" bgcolor="#{colors[:header_bgcolor]}" align="center"><font color="#{colors[:header_text_color]}"><b>#{table}</b></font></td></tr>
-        #{columns.map { |col| "<tr><td port=\"#{col.split.first}\" align=\"left\" balign=\"left\"><font color=\"#{colors[:cell_text_color]}\">#{col}</font></td></tr>" }.join}
+        #{columns.map { |col| "<tr><td port=\"#{col_name(col)}\" align=\"left\" balign=\"left\">#{COLUMN_ICONS[col_type(col)]} <font color=\"#{colors[:cell_text_color]}\">#{col}</font></td></tr>" }.join}
         </table>>];
       TABLE
-    end
+    end  
   
     def generate_relationship_edges(relationships, colors)
       relationships.map do |rel|
         "#{rel[:table_from]}:#{rel[:column_from]} -> #{rel[:table_to]}:#{rel[:column_to]} [label=\"\", arrowhead=open, color=\"#{colors[:relationship_color]}\"];"
       end.join("\n")
+    end
+  
+    def col_type(column)
+      # Implementa la lógica para extraer dinámicamente el tipo de la columna
+      type_part = column.split.last.downcase
+    
+      case type_part
+      when /int\d*/, 'integer', 'smallint', 'bigint'
+        'int'
+      when 'uuid'
+        'uuid'
+      when /character varying\d*/, 'varchar', 'char'
+        'varchar'
+      when 'text'
+        'text'
+      when 'date', 'timestamp'
+        type_part
+      when 'boolean'
+        'boolean'
+      when 'float', 'double precision', 'real'
+        'float'
+      when /numeric\d*/, 'decimal', 'money'
+        'decimal'
+      when 'bytea'
+        'bytea'
+      when 'json'
+        'json'
+      when 'xml'
+        'xml'
+      else
+        'unknown'  # O maneja otros tipos según necesites
+      end
+    end
+  
+    def col_name(column)
+      # Implementa la lógica para extraer el nombre de la columna
+      # Suponiendo que las columnas están en formato "nombre tipo"
+      column.split.first
     end
   end
   

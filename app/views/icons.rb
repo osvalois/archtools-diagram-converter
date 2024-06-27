@@ -1,0 +1,20 @@
+COLUMN_ICONS = {
+    'int2' => '🔢',      # Emoji para tipo int2
+    'uuid' => '🔑',      # Emoji para tipo uuid
+    'int' => '🔢',            # Ejemplo: Tipo INT
+    'varchar' => '🔤',        # Ejemplo: Tipo VARCHAR
+    'text' => '📄',           # Ejemplo: Tipo TEXT
+    'date' => '📅',           # Ejemplo: Tipo DATE
+    'boolean' => '✔️',       # Ejemplo: Tipo BOOLEAN
+    'bigint' => '🔘',         # Ejemplo: Tipo BIGINT
+    'float' => '🔢',          # Ejemplo: Tipo FLOAT
+    'double' => '➗',         # Ejemplo: Tipo DOUBLE
+    'decimal' => '💱',        # Ejemplo: Tipo DECIMAL
+    'timestamp' => '⏰',      # Ejemplo: Tipo TIMESTAMP
+    'char' => '🔡',           # Ejemplo: Tipo CHAR
+    'binary' => '🔠',         # Ejemplo: Tipo BINARY
+    'varbinary' => '🛡️',     # Ejemplo: Tipo VARBINARY
+    'json' => '📋',           # Ejemplo: Tipo JSON
+    'xml' => '📃',             # Ejemplo: Tipo XML
+    'pk' => '🔑'
+  }.freeze

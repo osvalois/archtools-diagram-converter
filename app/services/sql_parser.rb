@@ -4,7 +4,7 @@ class SqlParser
       relationships = parse_relationships(sql_content)
       { tables: tables, relationships: relationships }
     end
-    
+  
     def parse_tables(sql_content)
       table_pattern = /CREATE\s+TABLE\s+(\w+)\s+\((.*?)\);/im
       tables = {}
