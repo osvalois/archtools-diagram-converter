@@ -1,11 +1,10 @@
 class DiagramGenerator
-  
-    def generate_erb_from_sql(sql_file, colors)
+    def generate_erb_from_sql(sql_file, colors, border_width = '5')
       sql_content = File.read(sql_file)
       tables = SqlParser.new.parse_tables(sql_content)
       relationships = SqlParser.new.parse_relationships(sql_content)
   
-      generate_erb_diagram(tables, relationships, colors)
+      generate_erb_diagram(tables, relationships, colors, border_width)
     end
   
     def convert_erb_to_png(input_file)
@@ -33,7 +32,7 @@ class DiagramGenerator
   
     private
   
-    def generate_erb_diagram(tables, relationships, colors)
+    def generate_erb_diagram(tables, relationships, colors, border_width)
       erb_content = <<~ERB
         digraph ER {
           graph [pad="0.5", nodesep="0.5", ranksep="1"]
@@ -41,7 +40,7 @@ class DiagramGenerator
           rankdir=LR;
   
           // Definir nodos para las tablas
-          #{generate_table_nodes(tables, colors)}
+          #{generate_table_nodes(tables, colors, border_width)}
   
           // Definir relaciones entre las tablas
           #{generate_relationship_edges(relationships, colors)}
@@ -51,57 +50,61 @@ class DiagramGenerator
       erb_content
     end
   
-    def generate_table_nodes(tables, colors)
+    def generate_table_nodes(tables, colors, border_width)
       tables.map do |table, columns|
-        generate_table_node(table, columns, colors)
+        generate_table_node(table.upcase, columns, colors, border_width)
       end.join("\n")
     end
   
-    def generate_table_node(table, columns, colors)
+    def generate_table_node(table, columns, colors, border_width)
       <<~TABLE
-        #{table} [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="10" bgcolor="#{colors[:table_bgcolor]}" #{'style=shadow' if colors[:shadow]}>
-        <tr><td colspan="2" bgcolor="#{colors[:header_bgcolor]}" align="center"><font color="#{colors[:header_text_color]}"><b>#{table}</b></font></td></tr>
-        #{columns.map { |col| "<tr><td port=\"#{col_name(col)}\" align=\"left\" balign=\"left\">#{COLUMN_ICONS[col_type(col)]} <font color=\"#{colors[:cell_text_color]}\">#{col}</font></td></tr>" }.join}
-        </table>>];
+        "#{table}" [
+          label=<
+            <table border="0" cellborder="1" cellspacing="2" cellpadding="10" bgcolor="#{colors[:table_bgcolor]}" penwidth="#{border_width}" color="#{colors[:border_color]}">
+              <tr>
+                <td bgcolor="#{colors[:header_bgcolor]}" align="center" colspan="2" style="border-bottom: #{border_width}px solid #{colors[:border_color]};">
+                  <font color="#{colors[:header_text_color]}" face="#{colors[:font_family]}"><b>#{table}</b></font>
+                </td>
+              </tr>
+              #{columns.map { |col| "<tr><td port=\"#{col_name(col)}\" align=\"left\" balign=\"left\" bgcolor=\"#{colors[:table_bgcolor]}\" sides=\"b\" bordercolor=\"#{colors[:header_bgcolor]}\" height=\"25\"><font color=\"#{colors[:cell_text_color]}\" style='font-weight: bold;' point-size='11'> #{COLUMN_ICONS[col_type(col)]} &nbsp; #{col}</font></td></tr>" }.join("\n")}
+            </table>
+          >];
       TABLE
-    end  
+    end
   
     def generate_relationship_edges(relationships, colors)
       relationships.map do |rel|
-        "#{rel[:table_from]}:#{rel[:column_from]} -> #{rel[:table_to]}:#{rel[:column_to]} [label=\"\", arrowhead=open, color=\"#{colors[:relationship_color]}\"];"
+        "#{rel[:table_from].upcase}:#{rel[:column_from]} -> #{rel[:table_to].upcase}:#{rel[:column_to]} [label=\"\", arrowhead=open, color=\"#{colors[:relationship_color]}\"];"
       end.join("\n")
     end
   
     def col_type(column)
-      # Implementa la lógica para extraer dinámicamente el tipo de la columna
       type_part = column.split.last.downcase
-    
-      case type_part
-      when /int\d*/, 'integer', 'smallint', 'bigint'
-        'int'
-      when 'uuid'
-        'uuid'
-      when /character varying\d*/, 'varchar', 'char'
-        'varchar'
-      when 'text'
-        'text'
-      when 'date', 'timestamp'
-        type_part
-      when 'boolean'
-        'boolean'
-      when 'float', 'double precision', 'real'
-        'float'
-      when /numeric\d*/, 'decimal', 'money'
-        'decimal'
-      when 'bytea'
-        'bytea'
-      when 'json'
-        'json'
-      when 'xml'
-        'xml'
-      else
-        'unknown'  # O maneja otros tipos según necesites
+  
+      TYPES_MAP.each do |key, patterns|
+        patterns.each do |pattern|
+          if pattern.is_a?(Regexp)
+            return key.to_s if type_part.match?(pattern)
+          else
+            return key.to_s if type_part == pattern
+          end
+        end
       end
+  
+      second_part = column.split[1]&.downcase
+  
+      TYPES_MAP.each do |key, patterns|
+        patterns.each do |pattern|
+          if pattern.is_a?(Regexp)
+            return key.to_s if second_part&.match?(pattern)
+          else
+            return key.to_s if second_part == pattern
+          end
+        end
+      end
+  
+      # Si no coincide con ningún patrón, devuelve el tipo original.
+      type_part
     end
   
     def col_name(column)
