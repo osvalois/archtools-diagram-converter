@@ -1,3 +1,4 @@
+//app.js
 document.addEventListener('DOMContentLoaded', () => {
     // Función para descargar la imagen generada
 const downloadImage = () => {
