@@ -1,4 +1,4 @@
-# fly.toml app configuration file generated for pingerdata on 2024-06-26T01:04:45-06:00
+# fly.toml app configuration file generated for pingerdata on 2024-06-29T01:27:41-06:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
@@ -19,4 +19,4 @@ primary_region = 'qro'
 [[vm]]
   memory = '2gb'
   cpu_kind = 'shared'
-  cpus = 1
+  cpus = 2
