@@ -1,13 +1,16 @@
 document.addEventListener('DOMContentLoaded', () => {
+      // Agrega el evento al botón showResult para llamar a convertToPNG
+  document.getElementById('showResult').addEventListener('click', convertToPNG);
+  document.getElementById('viewFullScreen').addEventListener('click', viewFullScreen);
     const sqlEditor = CodeMirror.fromTextArea(document.getElementById('sql-editor'), {
-        mode: 'text/x-sql', // Modo SQL
-        theme: 'dracula', // Tema Dracula
-        lineNumbers: true, // Mostrar números de línea
-        indentUnit: 4, // Tamaño de la indentación
-        autofocus: true // Enfocar automáticamente el editor
+        mode: 'text/x-sql', 
+        theme: 'dracula', 
+        lineNumbers: true,
+        indentUnit: 4,
+        autofocus: true
     });
 
-    const fileInput = document.getElementById('uploadFile1');
+    const fileInput = document.getElementById('fileInput');
     const fileNameElement = document.getElementById('fileName');
 
     if (fileInput && fileNameElement) {
@@ -17,19 +20,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 const reader = new FileReader();
                 reader.onload = async function (e) {
                     const content = e.target.result;
-                    sqlEditor.getDoc().setValue(content); // Establecer el contenido del editor
+                    sqlEditor.getDoc().setValue(content);
                     
-                    // Verificar el tipo de SQL usando sql.js
-                    const isValidSQL = await isSQLValid(content);
-                    if (isValidSQL) {
-                        console.log('El archivo SQL es válido.');
-                    } else {
-                        console.log('El archivo no es un script SQL válido.');
-                    }
+                    //const isValidSQL = await isSQLValid(content);
+                    //f (isValidSQL) {
+                        //console.log('El archivo SQL es válido.');
+                    //} else {
+                        //console.log('El archivo no es un script SQL válido.');
+                    //}
+                    convertToPNG()
                 };
                 reader.readAsText(file);
 
-                // Mostrar el nombre del archivo seleccionado
                 fileNameElement.textContent = file.name;
             }
         });
@@ -37,9 +39,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const sidebarToggle = document.querySelector('.sidebar-toggle');
     const sidebarOverlay = document.querySelector('.sidebar-overlay');
+   
     const sidebarMenu = document.querySelector('.sidebar-menu');
     const main = document.querySelector('.main');
-
+    
     sidebarToggle.addEventListener('click', toggleSidebar);
     sidebarOverlay.addEventListener('click', closeSidebar);
 
@@ -49,15 +52,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initDropdowns();
 });
-
-// Función para verificar si el contenido es un script SQL válido usando sql.js
-async function isSQLValid(sqlContent) {
-    const SQL = await initSqlJs({ locateFile: file => '../scripts/plugins/sql-wasm.js' }); // Ajusta la ruta al archivo sql-wasm.js según tu estructura
-    try {
-        const db = new SQL.Database();
-        db.run(sqlContent); // Intenta ejecutar el script SQL
-        return true; // Si se ejecuta sin errores, es válido
-    } catch (error) {
-        return false; // Si hay errores al ejecutar, no es válido
-    }
-}

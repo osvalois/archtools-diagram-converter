@@ -5,10 +5,20 @@ const handleFileInputChange = (event) => {
     const fileNameDisplay = document.getElementById('fileName');
     
     if (file) {
-        displaySQLPreview(file);
         showViewer();
         fileNameDisplay.textContent = file.name;
     }
+};
+// Función para ver la imagen en pantalla grande
+const viewFullScreen = () => {
+  const resultContainer = document.getElementById('resultContainer');
+  const img = resultContainer.querySelector('img');
+  if (img) {
+    const fullScreenWindow = window.open('', '_blank');
+    fullScreenWindow.document.write('<html><head><title>Full Screen Image</title></head><body style="margin:0; display:flex; align-items:center; justify-content:center; background-color:black;">');
+    fullScreenWindow.document.write('<img src="' + img.src + '" style="max-width:100%; max-height:100%;">');
+    fullScreenWindow.document.write('</body></html>');
+  }
 };
 
 const toggleSidebar = (event) => {

@@ -30,44 +30,41 @@
   };
   
   // Función genérica para manejar la conversión y resultados
-   const fetchAndHandleConversion = (url, formData, resultContainer) => {
-    fetch(url, {
+// Función para manejar la conversión y pintar la imagen
+const fetchAndHandleConversion = async (url, formData, resultContainer) => {
+  try {
+    const response = await fetch(url, {
       method: 'POST',
       body: formData
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Error en la conversión');
-        }
-        return response.blob();
-      })
-      .then(blob => {
-        const imageUrl = URL.createObjectURL(blob);
-        const imageElement = document.createElement('img');
-        imageElement.src = imageUrl;
-        imageElement.classList.add('max-w-full', 'max-h-full');
-  
-        const downloadButton = document.createElement('a');
-        downloadButton.href = imageUrl;
-        downloadButton.download = 'diagram.png';
-        downloadButton.textContent = 'Descargar';
-        downloadButton.classList.add('block', 'mt-4', 'px-4', 'py-2', 'bg-green-500', 'text-white', 'rounded-lg', 'hover:bg-green-600', 'focus:outline-none');
-  
-        if (resultContainer) {
-          resultContainer.innerHTML = '';
-          resultContainer.appendChild(downloadButton);
-          resultContainer.appendChild(imageElement);
-          
-          // Mostrar el modal
-          const modal = document.getElementById('imageModal');
-          if (modal) {
-            modal.classList.remove('hidden');
-          }
-        }
-      })
-      .catch(error => {
-        if (resultContainer) {
-          resultContainer.innerHTML = `<p>${error.message}</p>`;
-        }
-      });
-  };
+    });
+    
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    const blob = await response.blob();
+    const imageUrl = URL.createObjectURL(blob);
+
+    // Limpiar el contenedor y añadir la imagen
+    resultContainer.innerHTML = '';
+    const img = document.createElement('img');
+    img.src = imageUrl;
+    img.alt = 'Generated Image';
+    img.classList.add('max-w-full', 'max-h-full');
+    resultContainer.appendChild(img);
+  } catch (error) {
+    console.error('Error during conversion:', error);
+    resultContainer.innerHTML = '<span class="text-red-500">Failed to generate image</span>';
+  }
+};
+// Función para verificar si el contenido es un script SQL válido usando sql.js
+async function isSQLValid(sqlContent) {
+  const SQL = await initSqlJs({ locateFile: file => '../scripts/plugins/sql-wasm.js' }); // Ajusta la ruta al archivo sql-wasm.js según tu estructura
+  try {
+      const db = new SQL.Database();
+      db.run(sqlContent); // Intenta ejecutar el script SQL
+      return true; // Si se ejecuta sin errores, es válido
+  } catch (error) {
+      return false; // Si hay errores al ejecutar, no es válido
+  }
+}
