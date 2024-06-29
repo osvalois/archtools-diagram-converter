@@ -56,7 +56,7 @@
 ## Instalación
 1. Clona este repositorio:
    ```sh
-   git clone <URL_del_repositorio>
+   git clone https://github.com/osvalois/pingerdata
 2. Instala las dependencias de Ruby:
    ```sh
    bundle install
