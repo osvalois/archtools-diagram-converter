@@ -1,6 +1,6 @@
 # diagram_repository.rb
 
-class DiagramRepository
+class DiagramaRepository
   def initialize(db_connection_string)
     @db = PG.connect(db_connection_string)
   end

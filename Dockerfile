@@ -10,6 +10,8 @@ COPY Gemfile Gemfile.lock ./
 # Instala las dependencias de la aplicación
 RUN apt-get update && apt-get install -y \
     graphviz \
+    libpq-dev \
+    build-essential \
  && rm -rf /var/lib/apt/lists/*
 
 # Instala la versión de Bundler especificada en el Gemfile.lock
