@@ -1,137 +1,97 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DeScale</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <link href="styles/styles.css" rel="stylesheet">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <link rel="preconnect" href="https://fonts.bunny.net">
+  <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- CodeMirror CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/theme/dracula.min.css">
+  <!-- CodeMirror JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/sql/sql.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.5.0/sql-wasm.js"></script>
+
+  <link rel="stylesheet" href="styles/styles.css">
+  <title>PingenDATA</title>
 </head>
 
-<body class="bg-gray-100">
-  <div class="relative isolate overflow-hidden bg-gray-900 py-16 sm:py-24 lg:py-32">
-    <div class="mx-auto max-w-7xl px-6 lg:px-8">
-      <div class="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-2">
-        <h1 class="text-3xl font-semibold text-center mb-8 text-white">Archivo SQL</h1>
-        <div id="viewerContainer" class="hidden">
-          <div class="flex justify-end space-x-4 mb-4">
-            <button id="editButton"
-              class="px-3 py-1 bg-blue-500 text-white rounded-lg shadow-sm hover:bg-blue-600 focus:outline-none">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 inline-block" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M4 15s1-1 4-1 5 2 5 2v-5s-1-1-4-1-5-2-5-2v6zm4-1V9l8-4v7m-8 4v3h12v-3m-6-4h4">
-                </path>
-              </svg>
-              Editar
-            </button>
-            <button id="deleteButton"
-              class="px-3 py-1 bg-red-500 text-white rounded-lg shadow-sm hover:bg-red-600 focus:outline-none">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 inline-block" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-              </svg>
-              Borrar
-            </button>
-          </div>
-          <div class="flex justify-center mb-4">
-            <textarea id="sqlPreview"
-              class="code-preview w-full resize-none rounded-lg p-4 bg-gray-333 text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              rows="10" readonly placeholder="Vista previa del script SQL"></textarea>
-          </div>
-        </div>
-        <div id="filePicker" class="flex items-center justify-center w-full">
-          <label for="fileInput"
-            class="relative flex flex-col items-center justify-center w-full h-64 border-2 border-gray-600 border-dashed rounded-lg cursor-pointer bg-gray-800 dark:bg-gray-900 hover:bg-gray-700 dark:hover:bg-gray-800 dark:border-gray-500 p-4">
-            <svg class="w-12 h-12 mb-4 text-gray-400 dark:text-gray-500" aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
-            </svg>
-            <p class="mb-2 text-lg text-gray-400 dark:text-gray-300 font-semibold">Haz clic para subir o arrastra tu
-              archivo SQL aquí</p>
-            <p class="text-sm text-gray-500 dark:text-gray-400">Tipo de archivo admitido: .sql</p>
-            <input id="fileInput" type="file" accept=".sql"
-              class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
-          </label>
-        </div>
-        <div class="flex flex-col items-center mb-2">
-          <dt class="mt-2 font-bold text-white-700 text-lg text-white">Convertir a:</dt>
-          <div class="flex justify-center mt-1">
-            <button onclick="convertToPNG()"
-              class="mr-2 px-4 py-2 bg-blue-500 text-white rounded-lg shadow-sm hover:bg-blue-600 focus:outline-none transition-colors duration-300">PNG</button>
-            <button onclick="convertToERB()"
-              class="ml-2 px-4 py-2 bg-blue-500 text-white rounded-lg shadow-sm hover:bg-blue-600 focus:outline-none transition-colors duration-300">ERB</button>
-          </div>
-        </div>
-        <dl class="grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:pt-2">
-          <div class="flex flex-col items-start">
-            <dt class="mt-4 font-bold text-white">Colores</dt>
-            <dd class="mt-2 leading-7 text-gray-400">Personaliza los colores del diagrama SQL.</dd>
-            <dt class="mt-4 font-semibold text-white">Fondos</dt>
-            <div class="flex gap-4">
-              <div class="rounded-full bg-white/5 p-2 ring-1 ring-white/10">
-                <div class="relative">
-                  <label for="tableBgColor" id="tableCard"
-                    class="flex items-center px-4 py-2 bg-white border border-gray-300 rounded-full shadow-sm cursor-pointer hover:bg-gray-50">
-                    <span class="text-gray-700">Tabla</span>
-                  </label>
-                  <input type="color" id="tableBgColor"
-                    class="absolute top-0 left-0 z-10 p-2 border border-gray-300 rounded-full shadow-sm opacity-0 cursor-pointer">
-                </div>
+<body class="text-gray-800 font-inter">
+  <!--sidenav -->
+  <div
+    class="fixed left-0 top-0 w-64 h-full bg-gradient-to-br from-violet-100 to-gray-200 bg-opacity-90 text-gray-900 p-4 z-50 sidebar-menu transition-transform">
+    <a href="#" class="flex items-center pb-4">
+
+      <h2 class="font-bold text-3xl text-gray-800 flex items-center" style="font-family: 'Roboto', sans-serif;">
+        <span class="bg-gradient-to-r from-purple-500 to-indigo-500 text-white px-2 py-1 rounded-l-md">Pingen</span>
+        <span class="bg-indigo-500 text-white px-2 py-1 rounded-r-md">Data</span>
+      </h2>
+
+    </a>
+    <ul class="mt-2">
+      <li class="mb-2">
+        <span class="text-gray-600 font-semibold">Styles</span>
+        <ul class="mt-2">
+          <div class="p-2">
+            <div class="flex flex-col gap-1">
+              <div class="flex flex-col">
+                <label for="tableBgColor" class="block text-sm font-medium text-gray-700 mb-1">Fondo de Tabla</label>
+                <input type="color" id="tableBgColor" class="w-full p-2 rounded-md bg-gray-100">
               </div>
-              <div class="rounded-full bg-white/5 p-2 ring-1 ring-white/10">
-                <div class="relative">
-                  <label for="headerBgColor" id="headerCard"
-                    class="flex items-center px-4 py-2 bg-white border border-gray-300 rounded-full shadow-sm cursor-pointer hover:bg-gray-50">
-                    <span class="text-gray-700">Encabezado</span>
-                  </label>
-                  <input type="color" id="headerBgColor"
-                    class="absolute top-0 left-0 z-10 p-2 border border-gray-300 rounded-full shadow-sm opacity-0 cursor-pointer">
-                </div>
+              <div class="flex flex-col">
+                <label for="headerBgColor" class="block text-sm font-medium text-gray-700 mb-1">Fondo de
+                  Encabezado</label>
+                <input type="color" id="headerBgColor" class="w-full p-2 rounded-md bg-gray-100">
+              </div>
+              <div class="flex flex-col">
+                <label for="cellTextColor" class="block text-sm font-medium text-gray-700 mb-1">Texto de Celdas</label>
+                <input type="color" id="cellTextColor" class="w-full p-2 rounded-md bg-gray-100">
+              </div>
+              <div class="flex flex-col">
+                <label for="headerTextColor" class="block text-sm font-medium text-gray-700 mb-1">Texto de
+                  Encabezado</label>
+                <input type="color" id="headerTextColor" class="w-full p-2 rounded-md bg-gray-100">
+              </div>
+              <div class="flex flex-col">
+                <label for="relationshipColor" class="block text-sm font-medium text-gray-700 mb-1">Color de
+                  Relaciones</label>
+                <input type="color" id="relationshipColor" class="w-full p-2 rounded-md bg-gray-100">
+              </div>
+              <div class="flex flex-col">
+                <label for="lineType" class="block text-sm font-medium text-gray-700 mb-1">Tipo de Línea</label>
+                <select id="lineType" name="lineType"
+                  class="w-full h-10 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                  <option value="solid">Sólida</option>
+                  <option value="dashed">Discontinua</option>
+                  <option value="dotted">Punteada</option>
+                </select>
               </div>
             </div>
-            <dt class="mt-4 font-semibold text-white">Textos</dt>
-            <div class="flex gap-4">
-              <div class="rounded-full bg-white/5 p-2 ring-1 ring-white/10">
-                <div class="relative">
-                  <label for="cellTextColor" id="cellTextCard"
-                    class="flex items-center px-4 py-2 bg-white border border-gray-300 rounded-full shadow-sm cursor-pointer hover:bg-gray-50">
-                    <span class="text-gray-700">Celdas</span>
+            <div class="mt-4">
+              <label for="fontStyle" class="block text-sm font-medium text-gray-700 mb-1">Estilo de Fuente</label>
+              <ul class="mt-2">
+                <li>
+                  <label class="inline-flex items-center">
+                    <input type="checkbox" class="form-checkbox h-4 w-4 text-gray-700" checked>
+                    <span class="ml-2 text-sm">Texto en Negrita</span>
                   </label>
-                  <input type="color" id="cellTextColor"
-                    class="absolute top-0 left-0 z-10 p-2 border border-gray-300 rounded-full shadow-sm opacity-0 cursor-pointer">
-                </div>
-              </div>
-              <div class="rounded-full bg-white/5 p-2 ring-1 ring-white/10">
-                <div class="relative">
-                  <label for="headerTextColor" id="headerTextCard"
-                    class="flex items-center px-4 py-2 bg-white border border-gray-300 rounded-full shadow-sm cursor-pointer hover:bg-gray-50">
-                    <span class="text-gray-700">Encabezado</span>
+                </li>
+                <li>
+                  <label class="inline-flex items-center mt-2">
+                    <input type="checkbox" class="form-checkbox h-4 w-4 text-gray-700">
+                    <span class="ml-2 text-sm">Texto en Itálica</span>
                   </label>
-                  <input type="color" id="headerTextColor"
-                    class="absolute top-0 left-0 z-10 p-2 border  border-gray-300 rounded-full shadow-sm opacity-0 cursor-pointer">
-                </div>
-              </div>
-            </div>
-            <div class="rounded-full bg-white/5 p-2 ring-1 ring-white/10">
-              <div class="relative">
-                <label for="relationshipColor" id="relationshipCard"
-                  class="flex items-center px-4 py-2 bg-white border border-gray-300 rounded-full shadow-sm cursor-pointer hover:bg-gray-50">
-                  <span class="text-gray-700">Relaciones</span>
-                </label>
-                <input type="color" id="relationshipColor"
-                  class="absolute top-0 left-0 z-10 p-2 border border-gray-300 rounded-full shadow-sm opacity-0 cursor-pointer">
-              </div>
-            </div>
-          </div>
-          <dt class="mt-4 font-semibold text-white">Tipografía</dt>
-          <dd class="mt-2 leading-7 text-gray-400">Elige la tipografía ideal para tu diagrama SQL.</dd>
-          <div class="flex flex-col items-start">
-            <div class="rounded-full bg-white/5 p-2">
-              <select id="fontFamily"
-                class="w-full p-2 border border-gray-300 rounded-lg shadow-sm cursor-pointer bg-white">
+                </li>
+              </ul>
+              <select id="fontStyle" name="fontStyle"
+                class="w-full h-10 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                 <option value="Arial">Arial</option>
                 <option value="Courier New">Courier New</option>
                 <option value="Georgia">Georgia</option>
@@ -140,37 +100,300 @@
               </select>
             </div>
           </div>
-        </dl>
-      </div>
-      <tbody id="attachmentsTableBody">
-        <!-- Las filas se agregarán dinámicamente aquí -->
-      </tbody>
+        </ul>
+      </li>
+      <li class="mb-2">
+        <span class="text-gray-600 font-semibold">Entities</span>
+        <ul class="mt-2">
+          <li class="group">
+            <a href="#"
+              class="flex items-center py-2 px-4 text-gray-700 hover:bg-gray-200 hover:text-gray-900 rounded-md">
+              <i class='bx bx-archive mr-3 text-lg'></i>
+              <span class="text-sm">Archive</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <div class="fixed top-0 left-0 w-full h-full bg-black/50 z-40 md:hidden sidebar-overlay"></div>
+  <!-- end sidenav -->
+
+  <main class="w-full md:w-[calc(100%-256px)] md:ml-64 bg-gray-200 min-h-screen transition-all main">
+    <!-- navbar -->
+    <div
+      class="py-2 px-6 bg-gradient-to-r from-stone-100 to-gray-200 flex items-center shadow-md shadow-black/5 sticky top-0 left-0 z-30">
+      <button type="button" class="text-lg text-gray-900 font-semibold sidebar-toggle">
+        <i class="ri-menu-line"></i>
+      </button>
+
+      <ul class="ml-auto flex items-center">
+        <li class="mr-1 dropdown">
+          <button type="button"
+            class="dropdown-toggle text-gray-400 mr-4 w-8 h-8 rounded flex items-center justify-center  hover:text-gray-600">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="hover:bg-gray-100 rounded-full"
+              viewBox="0 0 24 24" style="fill: gray;transform: ;msFilter:;">
+              <path
+                d="M19.023 16.977a35.13 35.13 0 0 1-1.367-1.384c-.372-.378-.596-.653-.596-.653l-2.8-1.337A6.962 6.962 0 0 0 16 9c0-3.859-3.14-7-7-7S2 5.141 2 9s3.14 7 7 7c1.763 0 3.37-.66 4.603-1.739l1.337 2.8s.275.224.653.596c.387.363.896.854 1.384 1.367l1.358 1.392.604.646 2.121-2.121-.646-.604c-.379-.372-.885-.866-1.391-1.36zM9 14c-2.757 0-5-2.243-5-5s2.243-5 5-5 5 2.243 5 5-2.243 5-5 5z">
+              </path>
+            </svg>
+          </button>
+          <div
+            class="dropdown-menu shadow-md shadow-black/5 z-30 hidden max-w-xs w-full bg-white rounded-md border border-gray-100">
+            <form action="" class="p-4 border-b border-b-gray-100">
+              <div class="relative w-full">
+                <input type="text"
+                  class="py-2 pr-4 pl-10 bg-gray-50 w-full outline-none border border-gray-100 rounded-md text-sm focus:border-blue-500"
+                  placeholder="Search...">
+                <i class="ri-search-line absolute top-1/2 left-4 -translate-y-1/2 text-gray-900"></i>
+              </div>
+            </form>
+          </div>
+        </li>
+        <li class="dropdown">
+          <button type="button"
+            class="dropdown-toggle text-gray-400 mr-4 w-8 h-8 rounded flex items-center justify-center  hover:text-gray-600">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="hover:bg-gray-100 rounded-full"
+              viewBox="0 0 24 24" style="fill: gray;transform: ;msFilter:;">
+              <path
+                d="M19 13.586V10c0-3.217-2.185-5.927-5.145-6.742C13.562 2.52 12.846 2 12 2s-1.562.52-1.855 1.258C7.185 4.074 5 6.783 5 10v3.586l-1.707 1.707A.996.996 0 0 0 3 16v2a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-2a.996.996 0 0 0-.293-.707L19 13.586zM19 17H5v-.586l1.707-1.707A.996.996 0 0 0 7 14v-4c0-2.757 2.243-5 5-5s5 2.243 5 5v4c0 .266.105.52.293.707L19 16.414V17zm-7 5a2.98 2.98 0 0 0 2.818-2H9.182A2.98 2.98 0 0 0 12 22z">
+              </path>
+            </svg>
+          </button>
+          <div
+            class="dropdown-menu shadow-md shadow-black/5 z-30 hidden max-w-xs w-full bg-white rounded-md border border-gray-100">
+            <div class="flex items-center px-4 pt-4 border-b border-b-gray-100 notification-tab">
+              <button type="button" data-tab="notification" data-tab-page="notifications"
+                class="text-gray-400 font-medium text-[13px] hover:text-gray-600 border-b-2 border-b-transparent mr-4 pb-1 active">Notifications</button>
+              <button type="button" data-tab="notification" data-tab-page="messages"
+                class="text-gray-400 font-medium text-[13px] hover:text-gray-600 border-b-2 border-b-transparent mr-4 pb-1">Messages</button>
+            </div>
+            <div class="my-2">
+              <ul class="max-h-64 overflow-y-auto" data-tab-for="notification" data-page="notifications">
+                <li>
+                  <a href="#" class="py-2 px-4 flex items-center hover:bg-gray-50 group">
+                    <img src="https://placehold.co/32x32" alt=""
+                      class="w-8 h-8 rounded block object-cover align-middle">
+                    <div class="ml-2">
+                      <div class="text-[13px] text-gray-600 font-medium truncate group-hover:text-blue-500">New order
+                      </div>
+                      <div class="text-[11px] text-gray-400">from a user</div>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="py-2 px-4 flex items-center hover:bg-gray-50 group">
+                    <img src="https://placehold.co/32x32" alt=""
+                      class="w-8 h-8 rounded block object-cover align-middle">
+                    <div class="ml-2">
+                      <div class="text-[13px] text-gray-600 font-medium truncate group-hover:text-blue-500">New order
+                      </div>
+                      <div class="text-[11px] text-gray-400">from a user</div>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="py-2 px-4 flex items-center hover:bg-gray-50 group">
+                    <img src="https://placehold.co/32x32" alt=""
+                      class="w-8 h-8 rounded block object-cover align-middle">
+                    <div class="ml-2">
+                      <div class="text-[13px] text-gray-600 font-medium truncate group-hover:text-blue-500">New order
+                      </div>
+                      <div class="text-[11px] text-gray-400">from a user</div>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="py-2 px-4 flex items-center hover:bg-gray-50 group">
+                    <img src="https://placehold.co/32x32" alt=""
+                      class="w-8 h-8 rounded block object-cover align-middle">
+                    <div class="ml-2">
+                      <div class="text-[13px] text-gray-600 font-medium truncate group-hover:text-blue-500">New order
+                      </div>
+                      <div class="text-[11px] text-gray-400">from a user</div>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="py-2 px-4 flex items-center hover:bg-gray-50 group">
+                    <img src="https://placehold.co/32x32" alt=""
+                      class="w-8 h-8 rounded block object-cover align-middle">
+                    <div class="ml-2">
+                      <div class="text-[13px] text-gray-600 font-medium truncate group-hover:text-blue-500">New order
+                      </div>
+                      <div class="text-[11px] text-gray-400">from a user</div>
+                    </div>
+                  </a>
+                </li>
+              </ul>
+              <ul class="max-h-64 overflow-y-auto hidden" data-tab-for="notification" data-page="messages">
+                <li>
+                  <a href="#" class="py-2 px-4 flex items-center hover:bg-gray-50 group">
+                    <img src="https://placehold.co/32x32" alt=""
+                      class="w-8 h-8 rounded block object-cover align-middle">
+                    <div class="ml-2">
+                      <div class="text-[13px] text-gray-600 font-medium truncate group-hover:text-blue-500">John Doe
+                      </div>
+                      <div class="text-[11px] text-gray-400">Hello there!</div>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="py-2 px-4 flex items-center hover:bg-gray-50 group">
+                    <img src="https://placehold.co/32x32" alt=""
+                      class="w-8 h-8 rounded block object-cover align-middle">
+                    <div class="ml-2">
+                      <div class="text-[13px] text-gray-600 font-medium truncate group-hover:text-blue-500">John Doe
+                      </div>
+                      <div class="text-[11px] text-gray-400">Hello there!</div>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="py-2 px-4 flex items-center hover:bg-gray-50 group">
+                    <img src="https://placehold.co/32x32" alt=""
+                      class="w-8 h-8 rounded block object-cover align-middle">
+                    <div class="ml-2">
+                      <div class="text-[13px] text-gray-600 font-medium truncate group-hover:text-blue-500">John Doe
+                      </div>
+                      <div class="text-[11px] text-gray-400">Hello there!</div>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="py-2 px-4 flex items-center hover:bg-gray-50 group">
+                    <img src="https://placehold.co/32x32" alt=""
+                      class="w-8 h-8 rounded block object-cover align-middle">
+                    <div class="ml-2">
+                      <div class="text-[13px] text-gray-600 font-medium truncate group-hover:text-blue-500">John Doe
+                      </div>
+                      <div class="text-[11px] text-gray-400">Hello there!</div>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="py-2 px-4 flex items-center hover:bg-gray-50 group">
+                    <img src="https://placehold.co/32x32" alt=""
+                      class="w-8 h-8 rounded block object-cover align-middle">
+                    <div class="ml-2">
+                      <div class="text-[13px] text-gray-600 font-medium truncate group-hover:text-blue-500">John Doe
+                      </div>
+                      <div class="text-[11px] text-gray-400">Hello there!</div>
+                    </div>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </li>
+        <button id="fullscreen-button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="hover:bg-gray-100 rounded-full"
+            viewBox="0 0 24 24" style="fill: gray;transform: ;msFilter:;">
+            <path d="M5 5h5V3H3v7h2zm5 14H5v-5H3v7h7zm11-5h-2v5h-5v2h7zm-2-4h2V3h-7v2h5z"></path>
+          </svg>
+        </button>
+        <li class="dropdown ml-3">
+          <button type="button" class="dropdown-toggle flex items-center">
+            <div class="flex-shrink-0 w-10 h-10 relative">
+              <div class="p-1 bg-white rounded-full focus:outline-none focus:ring">
+                <img class="w-8 h-8 rounded-full"
+                  src="https://laravelui.spruko.com/tailwind/ynex/build/assets/images/faces/9.jpg" alt="" />
+                <div class="top-0 left-7 absolute w-3 h-3 bg-lime-400 border-2 border-white rounded-full animate-ping">
+                </div>
+                <div class="top-0 left-7 absolute w-3 h-3 bg-lime-500 border-2 border-white rounded-full"></div>
+              </div>
+            </div>
+            <div class="p-2 md:block text-left">
+              <h2 class="text-sm font-semibold text-gray-800">John Doe</h2>
+              <p class="text-xs text-gray-500">Administrator</p>
+            </div>
+          </button>
+          <ul
+            class="dropdown-menu shadow-md shadow-black/5 z-30 hidden py-1.5 rounded-md bg-white border border-gray-100 w-full max-w-[140px]">
+            <li>
+              <a href="#"
+                class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-[#f84525] hover:bg-gray-50">Profile</a>
+            </li>
+            <li>
+              <a href="#"
+                class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-[#f84525] hover:bg-gray-50">Settings</a>
+            </li>
+            <li>
+              <form method="POST" action="">
+                <a role="menuitem"
+                  class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-[#f84525] hover:bg-gray-50 cursor-pointer"
+                  onclick="event.preventDefault();
+                                    this.closest('form').submit();">
+                  Log Out
+                </a>
+              </form>
+            </li>
+          </ul>
+        </li>
+      </ul>
     </div>
-    <div id="imageModal"
-      class="fixed inset-0 z-50 hidden overflow-y-auto bg-gray-900 bg-opacity-50 flex items-center justify-center">
-      <div class="bg-white rounded-lg p-8 max-w-lg mx-auto">
-        <h2 class="text-2xl font-semibold mb-4">Resultado del Diagrama</h2>
-        <div id="resultContainer" class="text-center"></div>
-        <div class="flex justify-center mt-6 space-x-4">
-          <button id="fullscreenButton" 
-            class="px-4 py-2 bg-blue-500 text-white rounded-lg shadow-sm hover:bg-blue-600 focus:outline-none">Ver en
-            pantalla completa</button>
-          <button id="closeFullscreenButton"
-            class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg shadow-sm hover:bg-gray-400 focus:outline-none">Cerrar Pantalla Completa</button>
+    <!-- end navbar -->
+
+    <section class="px-4 py-8">
+      <div class="flex flex-col gap-4">
+        <div class="bg-gradient-to-br from-violet-100 to-gray-200 bg-opacity-90 text-gray-900 p-4 rounded-md shadow-md">
+          <div class="flex justify-between items-center">
+            <h2 class="text-xl font-semibold text-gray-800">Editor</h2>
+            <div class="bg-gray-200 text-[#333] flex items-center shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] p-1 w-max font-[sans-serif] rounded-md overflow-hidden">
+              <div class="px-4 flex">
+                <span id="fileName" class="ml-2 text-gray-500"></span>
+              </div>
+              <input type="file" id="uploadFile1" class="hidden" />
+              <label for="uploadFile1" class="block px-6 py-2.5 rounded text-gray-600 text-sm tracking-wider font-semibold border-none outline-none cursor-pointer bg-gradient-to-r from-purple-500 to-indigo-500 text-white px-2 py-1 rounded-l-md hover:bg-gray-100">Browse</label>
+            </div>
+          </div>
+          <textarea id="sql-editor" class="editor"></textarea>
+        </div>
+        
+
+
+        <!-- Display Resulting -->
+        <div class="bg-gradient-to-br from-violet-100 to-gray-200 bg-opacity-90 text-gray-900 p-4 rounded-md shadow-md">
+          <div class="flex justify-between items-center">
+            <h2 class="text-xl font-semibold text-gray-800">Resulting</h2>
+             <div
+              class="bg-gray-200 text-[#333] flex items-center shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] p-1 w-max font-[sans-serif] rounded-md overflow-hidden">
+              <div class="px-4 flex">
+                <p class="text-sm ml-1">Export</p>
+              </div>
+              <button type="button"
+              class="px-5 py-2.5 flex items-center text-sm tracking-wider outline-none hover:bg-gray-200 transition ease-in-out duration-150">
+              <svg class="w-4 h-4 fill-gray-400" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd"
+                  d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                  clip-rule="evenodd"></path>
+              </svg>
+            </button>
           
-          <button id="closeModalButton"
-            class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg shadow-sm hover:bg-gray-400 focus:outline-none">Cerrar Modal</button>
+            <button type="button"
+              class="px-5 py-2.5 flex items-center text-sm tracking-wider outline-none bg-gradient-to-r from-purple-500 to-indigo-500 text-white transition ease-in-out duration-150">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-blue-500" viewBox="0 0 24 24">
+                <path
+                  d="M1 1a1 1 0 1 0 0 2h1.78a.694.694 35.784 0 1 .657.474l3.297 9.893c.147.44.165.912.053 1.362l-.271 1.087C6.117 17.41 7.358 19 9 19h12a1 1 0 1 0 0-2H9c-.39 0-.64-.32-.545-.697l.205-.818A.64.64 142.028 0 1 9.28 15H20a1 1 0 0 0 .95-.684l2.665-8A1 1 0 0 0 22.666 5H6.555a.694.694 35.783 0 1-.658-.474l-.948-2.842A1 1 0 0 0 4 1zm7 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm12 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"
+                  data-original="#000000" paint-order="fill markers stroke"></path>
+              </svg>
+            </button>
+              
             
+          </div>
+          <h2 class="text-xl font-semibold text-gray-800 mb-4"></h2>
+        </div>
+    
+          <div id="resulting"
+            class="w-full h-96 border border-gray-300 rounded-md flex items-center justify-center">
+            <span class="text-gray-500">No image generated yet</span>
+          </div>
         </div>
       </div>
-    </div>
-
-    <div class="absolute left-1/2 top-0 -z-10 -translate-x-1/2 blur-3xl xl:-top-6" aria-hidden="true">
-      <div class="aspect-[1155/678] w-[72.1875rem] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30"
-        style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)">
-      </div>
-    </div>
-  </div>
+    </section>
+  </main>
+  <script src="https://unpkg.com/@popperjs/core@2"></script>
   <script src="scripts/services.js"></script>
   <script src="scripts/ui.js"></script>
   <script src="scripts/utils.js"></script>

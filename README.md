@@ -1,7 +1,7 @@
 # archtools-diagram-converter
 
 ## Descripción
-Esta aplicación web permite convertir archivos SQL en diagramas ERB e imágenes. Ofrece personalización de colores, tipografia, logo y ancho de lineas para los diagramas generados.
+Esta aplicación web permite convertir archivos SQL en diagramas ERB e imágenes. Ofrece personalización de colores, tipografía, imágenes, logos y líneas para los diagramas generados.
 
 ## Instalación
 1. Clona este repositorio:

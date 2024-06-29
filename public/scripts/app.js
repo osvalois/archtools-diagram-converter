@@ -1,55 +1,63 @@
-
 document.addEventListener('DOMContentLoaded', () => {
-    // Evento cuando se carga el DOM
+    const sqlEditor = CodeMirror.fromTextArea(document.getElementById('sql-editor'), {
+        mode: 'text/x-sql', // Modo SQL
+        theme: 'dracula', // Tema Dracula
+        lineNumbers: true, // Mostrar números de línea
+        indentUnit: 4, // Tamaño de la indentación
+        autofocus: true // Enfocar automáticamente el editor
+    });
 
-    // Event listener para editar
-    const editButton = document.getElementById('editButton');
-    if (editButton) {
-        editButton.addEventListener('click', () => {
-            // Lógica para editar
-        });
-    }
+    const fileInput = document.getElementById('uploadFile1');
+    const fileNameElement = document.getElementById('fileName');
 
-    // Event listener para eliminar
-    const deleteButton = document.getElementById('deleteButton');
-    if (deleteButton) {
-        deleteButton.addEventListener('click', () => {
-            showPicker();
-        });
-    }
-    // Event listener para abrir fullscreen
-    const fullscreenButton = document.getElementById('fullscreenButton');
-    if (fullscreenButton) {
-        fullscreenButton.addEventListener('click', () => {
-            openFullscreen();
-        });
-    }
-
-    // Event listener para cerrar modal y fullscreen
-    const closeModalButton = document.getElementById('closeModalButton');
-    if (closeModalButton) {
-        closeModalButton.addEventListener('click', () => {
-            closeModal();
-        });
-    }
-    // Event listener para cerrar la pantalla completa
-    const closeFullscreenButton = document.getElementById('closeFullscreenButton');
-    if (closeFullscreenButton) {
-        closeFullscreenButton.addEventListener('click', () => {
-            closeFullscreen();
-        });
-    }
-
-
-    // Event listener para cargar archivos y mostrar vista previa
-    const fileInput = document.getElementById('fileInput');
-    if (fileInput) {
+    if (fileInput && fileNameElement) {
         fileInput.addEventListener('change', () => {
             const file = fileInput.files[0];
             if (file) {
-                displaySQLPreview(file);
-                showViewer();
+                const reader = new FileReader();
+                reader.onload = async function (e) {
+                    const content = e.target.result;
+                    sqlEditor.getDoc().setValue(content); // Establecer el contenido del editor
+                    
+                    // Verificar el tipo de SQL usando sql.js
+                    const isValidSQL = await isSQLValid(content);
+                    if (isValidSQL) {
+                        console.log('El archivo SQL es válido.');
+                    } else {
+                        console.log('El archivo no es un script SQL válido.');
+                    }
+                };
+                reader.readAsText(file);
+
+                // Mostrar el nombre del archivo seleccionado
+                fileNameElement.textContent = file.name;
             }
         });
     }
+
+    const sidebarToggle = document.querySelector('.sidebar-toggle');
+    const sidebarOverlay = document.querySelector('.sidebar-overlay');
+    const sidebarMenu = document.querySelector('.sidebar-menu');
+    const main = document.querySelector('.main');
+
+    sidebarToggle.addEventListener('click', toggleSidebar);
+    sidebarOverlay.addEventListener('click', closeSidebar);
+
+    document.querySelectorAll('.sidebar-dropdown-toggle').forEach(item => {
+        item.addEventListener('click', handleSidebarDropdownClick);
+    });
+
+    initDropdowns();
 });
+
+// Función para verificar si el contenido es un script SQL válido usando sql.js
+async function isSQLValid(sqlContent) {
+    const SQL = await initSqlJs({ locateFile: file => '../scripts/plugins/sql-wasm.js' }); // Ajusta la ruta al archivo sql-wasm.js según tu estructura
+    try {
+        const db = new SQL.Database();
+        db.run(sqlContent); // Intenta ejecutar el script SQL
+        return true; // Si se ejecuta sin errores, es válido
+    } catch (error) {
+        return false; // Si hay errores al ejecutar, no es válido
+    }
+}
