@@ -1,7 +1,22 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Función para descargar la imagen generada
+const downloadImage = () => {
+    const resultContainer = document.getElementById('resultContainer');
+    const img = resultContainer.querySelector('img');
+    if (img) {
+      const link = document.createElement('a');
+      link.href = img.src;
+      link.download = 'generated_image.png';
+      link.click();
+    }
+  };
+  document.getElementById('resultContainer').addEventListener('click', viewFullScreen);
+ 
+  
       // Agrega el evento al botón showResult para llamar a convertToPNG
   document.getElementById('showResult').addEventListener('click', convertToPNG);
   document.getElementById('viewFullScreen').addEventListener('click', viewFullScreen);
+  document.getElementById('downloadImage').addEventListener('click', downloadImage);
     const sqlEditor = CodeMirror.fromTextArea(document.getElementById('sql-editor'), {
         mode: 'text/x-sql', 
         theme: 'dracula', 

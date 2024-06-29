@@ -9,18 +9,43 @@ const handleFileInputChange = (event) => {
         fileNameDisplay.textContent = file.name;
     }
 };
-// Función para ver la imagen en pantalla grande
+// Función para ver la imagen en pantalla completa usando un modal
 const viewFullScreen = () => {
-  const resultContainer = document.getElementById('resultContainer');
-  const img = resultContainer.querySelector('img');
-  if (img) {
-    const fullScreenWindow = window.open('', '_blank');
-    fullScreenWindow.document.write('<html><head><title>Full Screen Image</title></head><body style="margin:0; display:flex; align-items:center; justify-content:center; background-color:black;">');
-    fullScreenWindow.document.write('<img src="' + img.src + '" style="max-width:100%; max-height:100%;">');
-    fullScreenWindow.document.write('</body></html>');
-  }
-};
-
+    const resultContainer = document.getElementById('resultContainer');
+    const img = resultContainer.querySelector('img');
+    if (img) {
+      const modalContainer = document.createElement('div');
+      modalContainer.classList.add('fixed', 'top-0', 'left-0', 'w-full', 'h-full', 'bg-black', 'bg-opacity-90', 'flex', 'items-center', 'justify-center', 'z-50');
+      
+      const modalContent = document.createElement('div');
+      modalContent.classList.add('max-w-screen-lg', 'mx-auto', 'overflow-hidden', 'shadow-lg', 'rounded-md');
+  
+      const fullScreenImage = document.createElement('img');
+      fullScreenImage.src = img.src;
+      fullScreenImage.classList.add('max-w-full', 'max-h-full');
+  
+      const closeButton = document.createElement('button');
+      closeButton.textContent = 'Close';
+      closeButton.classList.add('absolute', 'top-4', 'right-4', 'px-3', 'py-1', 'bg-gray-800', 'text-white', 'rounded-md', 'hover:bg-gray-700', 'focus:outline-none');
+      closeButton.addEventListener('click', () => {
+        modalContainer.remove();
+      });
+  
+      modalContent.appendChild(fullScreenImage);
+      modalContent.appendChild(closeButton);
+      modalContainer.appendChild(modalContent);
+  
+      document.body.appendChild(modalContainer);
+  
+      // Event listener para cerrar el modal al hacer clic fuera de la imagen
+      modalContainer.addEventListener('click', (e) => {
+        if (e.target === modalContainer) {
+          modalContainer.remove();
+        }
+      });
+    }
+  };
+  
 const toggleSidebar = (event) => {
     event.preventDefault();
     document.querySelector('.main').classList.toggle('active');
