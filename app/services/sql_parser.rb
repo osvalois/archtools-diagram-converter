@@ -19,10 +19,32 @@ class SqlParser
   
     def parse_relationships(sql_content)
       relationships = []
-  
-      relationships += parse_foreign_keys_in_tables(sql_content)
-      relationships += parse_foreign_keys_alter_table(sql_content)
-  
+    
+      # Buscar relaciones definidas en CREATE TABLE
+      create_table_pattern = /CREATE\s+TABLE\s+(\w+)\s*\((.*?)\);/im
+      sql_content.scan(create_table_pattern) do |table_name, table_content|
+        fk_pattern = /FOREIGN\s+KEY\s*\((\w+)\)\s*REFERENCES\s+(\w+)\s*\((\w+)\)/i
+        table_content.scan(fk_pattern) do |column_from, table_to, column_to|
+          relationships << {
+            table_from: table_name,
+            column_from: column_from,
+            table_to: table_to,
+            column_to: column_to
+          }
+        end
+      end
+    
+      # Buscar relaciones definidas con ALTER TABLE
+      alter_table_pattern = /ALTER\s+TABLE\s+(\w+)\s+ADD\s+CONSTRAINT\s+\w+\s+FOREIGN\s+KEY\s*\((\w+)\)\s+REFERENCES\s+(\w+)\s*\((\w+)\)/im
+      sql_content.scan(alter_table_pattern) do |table_from, column_from, table_to, column_to|
+        relationships << {
+          table_from: table_from,
+          column_from: column_from,
+          table_to: table_to,
+          column_to: column_to
+        }
+      end
+    
       relationships
     end
   

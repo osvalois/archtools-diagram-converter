@@ -1,13 +1,15 @@
 TYPES_MAP = {
-    int: [/int\d*/, 'integer', 'smallint', 'bigint'],
-    uuid: ['uuid', 'uniqueidentifier'],
-    varchar: [/character varying\d*/, 'varchar', 'char', 'nvarchar', 'nvarchar(max)'],
-    text: ['text'],
-    date: ['date', 'timestamp', 'datetime2'],
-    boolean: ['boolean'],
-    float: ['float', 'double precision', 'real'],
-    decimal: [/numeric\d*/, 'decimal', 'money'],
-    bytea: ['bytea'],
-    json: ['json'],
-    xml: ['xml']
-  }.freeze
+  int: ['int', 'integer', 'smallint', 'bigint', /^int\(\d+\)$/],
+  varchar: ['varchar', 'character varying', /character varying\d*/, 'varchar', 'char', 'nvarchar', 'nvarchar(max)', /^varchar\(\d+\)$/],
+  text: ['text', 'longtext', 'mediumtext'],
+  date: ['date'],
+  timestamp: ['timestamp', 'datetime'],
+  boolean: ['boolean', 'bool'],
+  float: ['float', 'real', 'double precision'],
+  decimal: ['decimal', 'numeric',/numeric\d*/, 'money'],
+  uuid: ['uuid', 'uniqueidentifier'],
+  jsonb: ['jsonb', 'json'],
+  array: [/\[\]$/],
+  xml: ['xml'],
+  bytea: ['bytea'],
+}
