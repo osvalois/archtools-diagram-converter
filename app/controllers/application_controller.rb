@@ -7,7 +7,7 @@ class ApplicationController < Sinatra::Base
   end
 
   # Ruta para servir el formulario de creación de usuario
-  get '/usuarios' do
+  get '/usuarios/crear' do
     begin
       file_path = File.join(settings.public_folder, 'scripts/usuarios/presentation/views/crearUsuario.html')
       logger.info "Trying to send file: #{file_path}"
