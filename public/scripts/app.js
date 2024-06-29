@@ -1,6 +1,7 @@
 //app.js
 document.addEventListener('DOMContentLoaded', () => {
     // Función para descargar la imagen generada
+    
 const downloadImage = () => {
     const resultContainer = document.getElementById('resultContainer');
     const img = resultContainer.querySelector('img');
