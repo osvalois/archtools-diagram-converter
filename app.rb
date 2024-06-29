@@ -8,6 +8,8 @@ class App < Sinatra::Base
 
   use ApplicationController
   use DiagramController
-
+  use UsuariosController
+  use ColaboradoresController
+  
   run! if app_file == $0
 end
