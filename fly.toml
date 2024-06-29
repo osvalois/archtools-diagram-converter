@@ -1,9 +1,9 @@
-# fly.toml app configuration file generated for archtools-diagram-converter on 2024-06-26T01:04:45-06:00
+# fly.toml app configuration file generated for pingerdata on 2024-06-26T01:04:45-06:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'archtools-diagram-converter'
+app = 'pingerdata'
 primary_region = 'qro'
 
 [build]
