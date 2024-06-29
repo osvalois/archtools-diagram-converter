@@ -15,7 +15,7 @@
 3. **Gestión de versiones de tus scripts:** Mantén un registro organizado y accesible de las diferentes versiones de tus scripts para un seguimiento y control efectivos.
 
 
-### Funcionalidades Ampliadas
+### Administración de Bases de Datos
 
 1. **Manual de Procedimientos y Políticas de Administración de la Base de Datos**
    - Procedimientos de respaldo y recuperación
