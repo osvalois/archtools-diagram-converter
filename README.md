@@ -1,7 +1,7 @@
-# archtools-diagram-converter
+# pingerdata
 
 ## Descripción
-Esta aplicación web permite convertir archivos SQL en diagramas ERB e imágenes. Ofrece personalización de colores, tipografía, imágenes, logos y líneas para los diagramas generados.
+Esta aplicación facilita la visualización y trabajo con estructuras de datos, ofreciendo personalización para los elementos generados y asistencia mediante inteligencia artificial para mejorar la experiencia.
 
 ## Instalación
 1. Clona este repositorio:
