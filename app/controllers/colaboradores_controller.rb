@@ -1,8 +1,8 @@
-# colaboradores_controller.rb
 class ColaboradoresController < Sinatra::Base
     def initialize(app = nil)
       super(app)
-      @colaborador_repository = ColaboradorRepository.new(ENV['DATABASE_URL'])
+      db_url = ENV['DATABASE_URL']
+      @colaborador_repository = ColaboradorRepository.new(db_url)
     end
   
     post '/colaboradores' do

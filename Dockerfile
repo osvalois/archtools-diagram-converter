@@ -10,8 +10,6 @@ COPY Gemfile Gemfile.lock ./
 # Instala las dependencias de la aplicación
 RUN apt-get update && apt-get install -y \
     graphviz \
-    libpq-dev \
-    build-essential \
  && rm -rf /var/lib/apt/lists/*
 
 # Instala la versión de Bundler especificada en el Gemfile.lock
@@ -22,6 +20,9 @@ RUN bundle _1.17.2_ install
 
 # Copia el resto de los archivos al contenedor
 COPY . .
+
+# Establece la variable de entorno DATABASE_URL
+ENV DATABASE_URL=postgresql://osvaloismtz:JX58MQsTLVSD@ep-proud-recipe-87355146.us-east-2.aws.neon.tech/fintech?sslmode=require&options=endpoint%3Dep-proud-recipe-87355146
 
 # Expone el puerto que usará Sinatra
 EXPOSE 4567

@@ -1,8 +1,8 @@
-# usuarios_controller.rb
 class UsuariosController < Sinatra::Base
     def initialize(app = nil)
       super(app)
-      @usuario_repository = UsuarioRepository.new(ENV['DATABASE_URL'])
+      db_url = ENV['DATABASE_URL']
+      @usuario_repository = UsuarioRepository.new(db_url)
     end
   
     post '/usuarios' do
@@ -22,3 +22,4 @@ class UsuariosController < Sinatra::Base
       erb :usuario_detalle
     end
   end
+  
