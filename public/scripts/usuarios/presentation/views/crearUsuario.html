@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crear Usuario</title>
+</head>
+<body>
+  <div id="crearUsuarioFormContainer"></div>
+
+  <script type="module" src="scripts/usuarios/presentation/components/usuarios/crearUsuarioForm.js"></script>
+  <script type="module">
+    import CrearUsuarioForm from './scripts/usuarios/presentation/components/usuarios/crearUsuarioForm.js';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const crearUsuarioFormContainer = document.getElementById('crearUsuarioFormContainer');
+      const form = CrearUsuarioForm(); // Usamos la función importada
+      crearUsuarioFormContainer.appendChild(form);
+    });
+  </script>
+</body>
+</html>
