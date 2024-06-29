@@ -28,7 +28,26 @@
   
     return formData;
   };
-  
+// Función para manejar la solicitud de conversión a ERB
+const fetchAndHandleConversionERB = async (url, formData) => {
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error('La conversión a ERB falló.');
+    }
+
+    const erbContent = await response.text();
+    return erbContent;
+  } catch (error) {
+    console.error('Error al manejar la conversión a ERB:', error);
+    throw error; // Propaga el error para que sea manejado por el caller adecuadamente
+  }
+};
+
   // Función genérica para manejar la conversión y resultados
 // Función para manejar la conversión y pintar la imagen
 const fetchAndHandleConversion = async (url, formData, resultContainer) => {

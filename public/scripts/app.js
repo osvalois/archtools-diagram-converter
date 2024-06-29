@@ -12,12 +12,43 @@ const downloadImage = () => {
   };
   document.getElementById('resultContainer').addEventListener('click', viewFullScreen);
  
+  // Función para descargar el diagrama
+ // Función para descargar el diagrama
+const downloadDiagram = async () => {
+    const fileInput = document.getElementById('fileInput');
+    const formData = prepareFormData(fileInput);
+    if (!formData) return;
   
+    try {
+      const erbContent = await fetchAndHandleConversionERB('/convert/sql/erb', formData);
+  
+      // Descargar el contenido ERB como archivo
+      const blob = new Blob([erbContent], { type: 'text/plain' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'generated_diagram.erb';
+      link.click();
+    } catch (error) {
+      console.error('Error al convertir y descargar el diagrama:', error);
+      // Aquí puedes manejar errores de manera apropiada, como mostrar un mensaje al usuario
+    }
+  };
+  
+    // Event listener para manejar la descarga según el formato seleccionado
+    document.getElementById('downloadButton').addEventListener('click', () => {
+        const downloadFormat = document.getElementById('downloadFormat').value;
+        if (downloadFormat === 'image') {
+            console.log("image");
+          downloadImage();
+        } else if (downloadFormat === 'diagram') {
+            console.log("diagram");
+          downloadDiagram();
+        }
+      });
       // Agrega el evento al botón showResult para llamar a convertToPNG
   document.getElementById('showResult').addEventListener('click', convertToPNG);
   document.getElementById('viewFullScreen').addEventListener('click', viewFullScreen);
-  document.getElementById('downloadImage').addEventListener('click', downloadImage);
-    const sqlEditor = CodeMirror.fromTextArea(document.getElementById('sql-editor'), {
+   const sqlEditor = CodeMirror.fromTextArea(document.getElementById('sql-editor'), {
         mode: 'text/x-sql', 
         theme: 'dracula', 
         lineNumbers: true,

@@ -1,12 +1,12 @@
 //services.js
-// Función para convertir a ERB
- const convertToERB = () => {
+// Función para convertir SQL a ERB
+const convertToERB = () => {
   const fileInput = document.getElementById('fileInput');
   const formData = prepareFormData(fileInput);
   if (!formData) return;
-
-  fetchAndHandleConversion('/convert/sql/erb', formData);
+  fetchAndHandleConversionERB('/convert/sql/erb', formData);
 };
+
 
 // Función para convertir a PNG
  const convertToPNG = () => {
