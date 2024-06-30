@@ -4,8 +4,8 @@ class UsuariosRepository {
     }
   
     // Método para crear usuario
-    async crearUsuario(nombreUsuario, passphrase, recoveryKey) {
-      return await this.datasource.crearUsuario(nombreUsuario, passphrase, recoveryKey);
+    async crearUsuario(nombreUsuario, recoveryKey) {
+      return await this.datasource.crearUsuario(nombreUsuario, recoveryKey);
     }
   }
   

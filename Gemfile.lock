@@ -2,12 +2,14 @@ GEM
   remote: https://rubygems.org/
   specs:
     base64 (0.2.0)
+    bcrypt (3.1.20)
     bigdecimal (3.1.8)
     cgi (0.4.1)
     diff-lcs (1.5.1)
     dotenv (2.8.1)
     erb (2.2.3)
       cgi
+    multi_json (1.15.0)
     mustermann (3.0.0)
       ruby2_keywords (~> 0.0.1)
     open3 (0.2.1)
@@ -39,6 +41,12 @@ GEM
       rack (~> 2.2, >= 2.2.4)
       rack-protection (= 3.2.0)
       tilt (~> 2.0)
+    sinatra-contrib (3.2.0)
+      multi_json (>= 0.0.2)
+      mustermann (~> 3.0)
+      rack-protection (= 3.2.0)
+      sinatra (= 3.2.0)
+      tilt (~> 2.0)
     tempfile (0.2.1)
     tilt (2.3.0)
 
@@ -46,6 +54,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bcrypt
   dotenv
   erb
   open3
@@ -54,6 +63,7 @@ DEPENDENCIES
   rspec
   sequel
   sinatra
+  sinatra-contrib
   tempfile
 
 BUNDLED WITH

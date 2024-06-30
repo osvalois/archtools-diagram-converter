@@ -9,11 +9,10 @@ function CrearUsuarioForm() {
     submitButton.textContent = 'Espere...';
 
     const nombreUsuario = document.getElementById('nombreUsuario').value;
-    const passphrase = document.getElementById('passphrase').value;
     const recoveryKey = document.getElementById('recoveryKey').value;
 
     try {
-      const usuario = await UsuariosController.crearUsuario({ nombreUsuario, passphrase, recoveryKey });
+      const usuario = await UsuariosController.crearUsuario({ nombreUsuario, recoveryKey });
       console.log('Usuario creado:', usuario);
       alert('Usuario creado correctamente');
     } catch (error) {
@@ -36,13 +35,6 @@ function CrearUsuarioForm() {
   inputNombreUsuario.id = 'nombreUsuario';
   labelNombreUsuario.appendChild(inputNombreUsuario);
 
-  const labelPassphrase = document.createElement('label');
-  labelPassphrase.textContent = 'Passphrase:';
-  const inputPassphrase = document.createElement('input');
-  inputPassphrase.type = 'password';
-  inputPassphrase.id = 'passphrase';
-  labelPassphrase.appendChild(inputPassphrase);
-
   const labelRecoveryKey = document.createElement('label');
   labelRecoveryKey.textContent = 'Recovery Key:';
   const inputRecoveryKey = document.createElement('input');
@@ -56,7 +48,7 @@ function CrearUsuarioForm() {
 
   form.append(
     labelNombreUsuario, document.createElement('br'),
-    labelPassphrase, document.createElement('br'),
+
     labelRecoveryKey, document.createElement('br'),
     submitButton
   );

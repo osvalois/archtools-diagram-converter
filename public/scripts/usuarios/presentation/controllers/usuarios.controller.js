@@ -10,9 +10,9 @@ const usuarioRepository = new UsuariosRepository(datasource);
 const crearUsuarioUseCase = new CrearUsuarioUseCase(usuarioRepository);
 
 const UsuariosController = {
-  async crearUsuario({ nombreUsuario, passphrase, recoveryKey }) {
+  async crearUsuario({ nombreUsuario, recoveryKey }) {
     try {
-      const usuarioGuardado = await crearUsuarioUseCase.execute(nombreUsuario, passphrase, recoveryKey);
+      const usuarioGuardado = await crearUsuarioUseCase.execute(nombreUsuario, recoveryKey);
       return usuarioGuardado;
     } catch (error) {
       console.error('Error al crear usuario:', error);
