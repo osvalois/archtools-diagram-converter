@@ -1,7 +1,7 @@
-# Pingerdata
+# Pingendata
 
 ## Descripción
-   Pingerdata es una herramienta diseñada para gestionar la documentación en proyectos de bases de datos. Está enfocada en facilitar la creación de una documentación completa y detallada, dirigida principalmente a equipos de arquitectura y administradores de bases de datos (DBAs).
+   Pingendata es una herramienta diseñada para gestionar la documentación en proyectos de bases de datos. Está enfocada en facilitar la creación de una documentación completa y detallada, dirigida principalmente a equipos de arquitectura y administradores de bases de datos (DBAs).
 
    La herramienta permite centralizar y organizar la información crítica del proyecto, asegurando que todos los aspectos necesarios, desde modelos de datos hasta políticas de administración y optimización, estén documentados de manera clara y accesible.
 
@@ -56,7 +56,7 @@
 ## Instalación
 1. Clona este repositorio:
    ```sh
-   git clone https://github.com/osvalois/pingerdata
+   git clone https://github.com/osvalois/Pingendata
 2. Instala las dependencias de Ruby:
    ```sh
    bundle install

@@ -1,0 +1,27 @@
+ Mantenimiento y Escalabilidad
+Código Desorganizado: Sin un framework o biblioteca que imponga una estructura, el código puede volverse desorganizado y difícil de mantener a medida que crece.
+Separación de Preocupaciones: Mantener una clara separación entre HTML, CSS y JavaScript puede ser complicado, llevando a un código enmarañado y difícil de manejar.
+2. Gestión del Estado
+Estado Compartido: Manejar el estado compartido entre diferentes partes de la aplicación puede ser complicado sin herramientas adecuadas, llevando a errores difíciles de depurar.
+Reactividad: Implementar una gestión del estado reactiva desde cero puede ser complejo y propenso a errores.
+3. Manipulación del DOM
+Rendimiento: Las operaciones intensivas en el DOM pueden afectar negativamente el rendimiento. Sin bibliotecas optimizadas, puede ser difícil gestionar actualizaciones eficientes del DOM.
+Actualizaciones del DOM: Mantener el DOM sincronizado con el estado de la aplicación puede requerir mucho código manual y ser propenso a errores.
+4. Compatibilidad del Navegador
+Compatibilidad: Asegurarse de que el código funcione en todos los navegadores puede requerir muchos polyfills y pruebas exhaustivas.
+APIs Modernas: Usar APIs modernas de JavaScript puede ser problemático en navegadores más antiguos sin una adecuada transpilación y polyfilling.
+5. Herramientas de Desarrollo
+Modularidad: Sin un sistema de módulos nativo (más allá de ES6 modules, que no son compatibles con todos los entornos), puede ser difícil organizar y reutilizar el código.
+Automatización de Tareas: Tareas comunes como la minificación, la concatenación y la transpilaicón pueden requerir configuraciones manuales complicadas sin herramientas como Webpack, Gulp, o Grunt.
+6. Testing y Depuración
+Pruebas Unitarias: Configurar un entorno de pruebas sin herramientas específicas puede ser complicado.
+Depuración: Sin herramientas de desarrollo avanzadas, la depuración puede ser más difícil y menos eficiente.
+7. Integración de Dependencias
+Gestión de Dependencias: Sin un administrador de paquetes como npm, integrar y gestionar bibliotecas externas puede ser complicado.
+Compatibilidad de Versiones: Garantizar la compatibilidad de versiones de diferentes bibliotecas puede ser difícil sin herramientas que lo gestionen automáticamente.
+8. Rendimiento y Optimización
+Optimización: Sin herramientas automatizadas, optimizar el rendimiento de la aplicación (minificación de archivos, carga diferida, etc.) puede requerir mucho esfuerzo manual.
+Lazy Loading: Implementar técnicas de carga diferida y optimización del rendimiento puede ser más complicado sin herramientas específicas.
+Ejemplo de Desafíos Específicos
+Routing: Implementar un sistema de enrutamiento desde cero para gestionar diferentes vistas en una aplicación de una sola página (SPA) puede ser complejo.
+Componentes Reutilizables: Crear y gestionar componentes reutilizables sin un framework que lo facilite (como React, Vue o Angular) puede llevar a duplicación de código y errores.

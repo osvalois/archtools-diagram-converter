@@ -2,7 +2,7 @@
 APP_FILE = app.rb
 PORT = 4567
 RSPEC = bundle exec rspec
-DATABASE_URL=""
+DATABASE_URL="postgresql://osvaloismtz:JX58MQsTLVSD@ep-proud-recipe-87355146-pooler.us-east-2.aws.neon.tech/pingerdata?sslmode=require"
 
 
 # Targets

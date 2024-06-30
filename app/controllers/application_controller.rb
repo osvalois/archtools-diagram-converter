@@ -20,7 +20,7 @@ class ApplicationController < Sinatra::Base
   end
 
   get '/usuarios' do
-    serve_static_file(File.join(settings.public_folder, 'scripts/usuarios/presentation/views/crearUsuario.html'))
+    serve_static_file(File.join(settings.public_folder, 'scripts/usuarios/presentation/views/crearUsuario.view.html'))
   end
 
   get '/' do
