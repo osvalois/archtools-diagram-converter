@@ -34,7 +34,7 @@ export class FormularioCrearUsuario {
                 <p class="mb-3">Please register an account</p>
                 <div class="relative mb-2" data-twe-input-wrapper-init>
                     <div id="input-user-name"></div>
-                    <div class="text-red-500 text-xs mt-1">${state.errors.nombreUsuario}</div>
+                    <div class="text-red-500 text-xs mt-1">${state.errors.crearUsuario}</div>
                 </div>
                 <div class="mb-4 pb-1 pt-1 text-center">
                 <div id="button-submit-form"></div>

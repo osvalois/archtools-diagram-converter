@@ -1,6 +1,6 @@
 // iconInputText.component.js
 
-import { darkThemeColors, lightThemeColors } from '../../../../data/datasource/themes.datasource.js';
+import { darkThemeColors, lightThemeColors } from '../../../../data/adapter/themes.adapter.js';
 
 export class IconInputTextComponent {
     constructor({
@@ -9,7 +9,7 @@ export class IconInputTextComponent {
         identifier = 'input-text',
         onChange = () => {},
         className = '',
-        ariaLabel = 'Input Text',
+        ariaLabel = '',
         inputBorderColor = lightThemeColors.inputBackground,
         ariaLabelColor = lightThemeColors.label,
         SVG = `

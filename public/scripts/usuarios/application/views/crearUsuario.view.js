@@ -1,6 +1,6 @@
 // src/main.js
-import { Store } from '../../data/datasource/store.datasource.js';
-import { UsuarioApiAdapter } from '../../data/datasource/usuarios.datasource.js';
+import { Store } from '../../data/adapter/store.adapter.js';
+import { UsuarioApiAdapter } from '../../data/adapter/usuarios.adapter.js';
 import { UsuarioRepository } from '../../data/repository/usuarios.repository.js';
 import { UsuarioService } from '../services/usuario.service.js';
 import { CrearUsuarioView } from './formulario-crear-usuario/formularioCrearUsuario.view.js';
