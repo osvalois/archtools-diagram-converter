@@ -1,18 +1,10 @@
-// consultarUsuarioNombre.usecase.js
-class ConsultarUsuarioPorNombreUseCase {
+// src/domain/usecases/consultarUsuarioPorNombre.usecase.js
+export class ConsultarUsuarioPorNombreUseCase {
   constructor(usuarioRepository) {
     this.usuarioRepository = usuarioRepository;
   }
 
   async execute(nombreUsuario) {
-    try {
-      const usuario = await this.usuarioRepository.consultarUsuarioPorNombre(nombreUsuario);
-      return usuario;
-    } catch (error) {
-      console.error('Error al ejecutar el caso de uso ConsultarUsuarioPorNombre:', error);
-      throw error;
-    }
+    return this.usuarioRepository.buscarPorNombre(nombreUsuario);
   }
 }
-
-export default ConsultarUsuarioPorNombreUseCase;

@@ -1,7 +1,7 @@
 class ApplicationController < Sinatra::Base
   configure do
     set :public_folder, File.expand_path('../../public', __dir__)
-    set :views, File.expand_path('../../public/scripts/core/presentation/views', __dir__)
+    set :views, File.expand_path('../../public/scripts/core/application/views', __dir__)
   end
 
   # Método para servir archivos estáticos de manera genérica
@@ -20,7 +20,7 @@ class ApplicationController < Sinatra::Base
   end
 
   get '/login' do
-    serve_static_file(File.join(settings.public_folder, 'scripts/usuarios/presentation/views/crearUsuario.view.html'))
+    serve_static_file(File.join(settings.public_folder, 'scripts/usuarios/application/views/crearUsuario.view.html'))
   end
 
   get '/' do
