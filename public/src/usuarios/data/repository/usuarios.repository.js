@@ -1,5 +1,5 @@
 // src/infrastructure/repositories/usuarioRepository.js
-import { UsuarioRepositoryPort } from '../../application/ports/usuarioRepository.port.js';
+import { UsuarioRepositoryPort } from '../../domain/ports/usuarioRepository.port.js';
 
 export class UsuarioRepository extends UsuarioRepositoryPort {
   constructor(apiAdapter) {

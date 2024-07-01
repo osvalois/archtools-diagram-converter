@@ -78,7 +78,7 @@ const fetchAndHandleConversion = async (url, formData, resultContainer) => {
 };
 // Función para verificar si el contenido es un script SQL válido usando sql.js
 async function isSQLValid(sqlContent) {
-  const SQL = await initSqlJs({ locateFile: file => '../scripts/plugins/sql-wasm.js' }); // Ajusta la ruta al archivo sql-wasm.js según tu estructura
+  const SQL = await initSqlJs({ locateFile: file => '../src/plugins/sql-wasm.js' }); // Ajusta la ruta al archivo sql-wasm.js según tu estructura
   try {
       const db = new SQL.Database();
       db.run(sqlContent); // Intenta ejecutar el script SQL

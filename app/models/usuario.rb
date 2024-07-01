@@ -1,4 +1,3 @@
-# usuario.rb
 class Usuario
   attr_reader :usuario_id, :nombre_usuario, :passphrase, :recovery_key, :fecha_creacion
 

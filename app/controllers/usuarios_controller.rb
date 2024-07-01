@@ -1,21 +1,20 @@
-require 'sinatra/base'
-require 'sinatra/json'
-require 'json'
-
 class UsuariosController < Sinatra::Base
   before do
     content_type :json
   end
 
+  configure do
+    set :db_url, ENV['DATABASE_URL']  # Asegúrate de que DATABASE_URL esté configurada en tu entorno
+  end
+
   def initialize(app = nil)
     super(app)
-    db_url = ENV['DATABASE_URL']  # Ensure DATABASE_URL is set in your environment
-    usuario_repository = UsuarioRepository.new(db_url)
-    @usuarios_service = UsuariosService.new(usuario_repository)
+    db_url = settings.db_url
+    @usuario_repository = UsuarioRepository.new(db_url)
+    @usuarios_service = UsuariosService.new(@usuario_repository)
   end
 
   post '/usuarios' do
-    request.body.rewind
     data = JSON.parse(request.body.read)
 
     nombre_usuario = data['nombre_usuario']
@@ -30,7 +29,10 @@ class UsuariosController < Sinatra::Base
       @usuarios_service.registrar_usuario(nombre_usuario, passphrase)
       status 201
       json mensaje: 'Usuario creado con éxito', passphrase: passphrase
-    rescue => e
+    rescue PG::Error => e
+      status 500
+      json mensaje: "Error de conexión con la base de datos: #{e.message}"
+    rescue StandardError => e
       status 500
       json mensaje: "Error al crear usuario: #{e.message}"
     end
@@ -50,20 +52,22 @@ class UsuariosController < Sinatra::Base
         status 404
         json mensaje: 'Usuario no encontrado'
       end
-    rescue => e
+    rescue PG::Error => e
+      status 500
+      json mensaje: "Error de conexión con la base de datos: #{e.message}"
+    rescue StandardError => e
       status 500
       json mensaje: "Error desconocido al obtener usuario: #{e.message}"
     end
   end
 
   get '/usuarios/nombre/:nombre_usuario' do
+    nombre_usuario = params[:nombre_usuario]
     begin
-      nombre_usuario = params[:nombre_usuario]
       usuario = @usuarios_service.obtener_usuario_por_nombre(nombre_usuario)
-
       if usuario
         status 200
-        json mensaje: 'Usuario encontrado', encontrado: true, usuario: {
+        json mensaje: 'Usuario encontrado', usuario: {
           nombre_usuario: usuario.nombre_usuario,
           fecha_creacion: usuario.fecha_creacion
         }
@@ -71,17 +75,16 @@ class UsuariosController < Sinatra::Base
         status 200
         json mensaje: 'Usuario no encontrado', encontrado: false
       end
-    rescue PG::ConnectionBad => e
+    rescue PG::Error => e
       status 500
       json mensaje: "Error de conexión con la base de datos: #{e.message}"
-    rescue => e
+    rescue StandardError => e
       status 500
       json mensaje: "Error desconocido al obtener usuario: #{e.message}"
     end
   end
 
   post '/usuarios/authenticate' do
-    request.body.rewind
     data = JSON.parse(request.body.read)
 
     nombre_usuario = data['nombre_usuario']
@@ -91,18 +94,25 @@ class UsuariosController < Sinatra::Base
       halt 400, json(mensaje: 'El nombre de usuario y la clave de recuperación son requeridos.')
     end
 
-    autenticado = @usuarios_service.autenticar_usuario(nombre_usuario, recovery_key)
-    if autenticado
-      status 200
-      json mensaje: 'Autenticación exitosa'
-    else
-      status 401
-      json mensaje: 'Autenticación fallida'
+    begin
+      autenticado = @usuarios_service.autenticar_usuario(nombre_usuario, recovery_key)
+      if autenticado
+        status 200
+        json mensaje: 'Autenticación exitosa'
+      else
+        status 401
+        json mensaje: 'Autenticación fallida'
+      end
+    rescue PG::Error => e
+      status 500
+      json mensaje: "Error de conexión con la base de datos: #{e.message}"
+    rescue StandardError => e
+      status 500
+      json mensaje: "Error desconocido al autenticar usuario: #{e.message}"
     end
   end
 
   post '/usuarios/recover' do
-    request.body.rewind
     data = JSON.parse(request.body.read)
 
     nombre_usuario = data['nombre_usuario']
@@ -121,7 +131,10 @@ class UsuariosController < Sinatra::Base
         status 401
         json mensaje: 'No se pudo recuperar la passphrase'
       end
-    rescue => e
+    rescue PG::Error => e
+      status 500
+      json mensaje: "Error de conexión con la base de datos: #{e.message}"
+    rescue StandardError => e
       status 500
       json mensaje: "Error desconocido al recuperar la passphrase: #{e.message}"
     end

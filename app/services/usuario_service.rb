@@ -1,3 +1,4 @@
+
 class UsuariosService
   def initialize(usuario_repository)
     @usuario_repository = usuario_repository
@@ -29,16 +30,10 @@ class UsuariosService
     usuario = @usuario_repository.obtener_usuario_por_nombre(nombre_usuario)
     return false unless usuario
 
-    stored_hash = usuario.passphrase
-    salt = usuario.recovery_key
+    stored_hash, salt = usuario.recovery_key.split('$')
 
-    # Separate the stored hash from the salt
-    stored_hash, salt = stored_hash.split('$')
-
-    # Calculate the hash for the provided recovery_key with the stored salt
     calculated_hash = hash_with_salt(recovery_key, salt)
 
-    # Compare the stored hash with the calculated hash
     stored_hash == calculated_hash
   end
 

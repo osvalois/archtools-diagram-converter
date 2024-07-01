@@ -9,6 +9,7 @@ require 'sinatra/json'
 require 'json'
 require 'bcrypt'
 require 'dotenv/load'
+require 'open-uri'
 
 require_relative '../app/controllers/application_controller'
 require_relative '../app/controllers/diagrama_controller'
