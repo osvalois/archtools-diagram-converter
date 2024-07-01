@@ -1,4 +1,3 @@
-# usuario_repository.rb
 class UsuarioRepository
   def initialize(db_connection_string)
     @db = PG.connect(db_connection_string)

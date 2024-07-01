@@ -19,7 +19,7 @@ class ApplicationController < Sinatra::Base
     erb :not_found, layout: false, locals: { file_path: request.path_info }
   end
 
-  get '/usuarios' do
+  get '/login' do
     serve_static_file(File.join(settings.public_folder, 'scripts/usuarios/presentation/views/crearUsuario.view.html'))
   end
 

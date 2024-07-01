@@ -1,6 +1,3 @@
-require 'securerandom'
-require 'open-uri'
-
 class UsuariosService
   def initialize(usuario_repository)
     @usuario_repository = usuario_repository

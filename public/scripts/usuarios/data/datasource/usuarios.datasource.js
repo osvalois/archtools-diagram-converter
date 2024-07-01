@@ -46,6 +46,25 @@ class UsuariosDatasource {
       throw error;
     }
   }
+  async consultarUsuarioPorNombre(nombreUsuario) {
+    try {
+      const response = await fetch(`${this.baseUrl}/usuarios/nombre/${encodeURIComponent(nombreUsuario)}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al consultar usuario: ' + response.status + ' ' + response.statusText);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error al consultar usuario:', error);
+      throw error;
+    }
+  }
 }
 
 export default UsuariosDatasource;

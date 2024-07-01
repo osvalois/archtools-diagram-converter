@@ -1,13 +1,17 @@
+// usuarios.repository.js
+
 class UsuariosRepository {
-    constructor(datasource) {
-      this.datasource = datasource;
-    }
-  
-    // Método para crear usuario
-    async crearUsuario(nombreUsuario, recoveryKey) {
-      return await this.datasource.crearUsuario(nombreUsuario, recoveryKey);
-    }
+  constructor(datasource) {
+    this.datasource = datasource;
   }
-  
-  export default UsuariosRepository;
-  
+
+  async crearUsuario(nombreUsuario, recoveryKey) {
+    return await this.datasource.crearUsuario(nombreUsuario, recoveryKey);
+  }
+
+  async consultarUsuarioPorNombre(nombreUsuario) {
+    return await this.datasource.consultarUsuarioPorNombre(nombreUsuario);
+  }
+}
+
+export default UsuariosRepository;

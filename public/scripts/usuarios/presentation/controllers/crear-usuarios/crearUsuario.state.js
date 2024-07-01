@@ -1,4 +1,4 @@
-const state = {
+let state = {
     nombreUsuario: '',
     recoveryKey: '',
     isSubmitting: false,
@@ -7,14 +7,18 @@ const state = {
     },
   };
   
-  const setState = new Proxy(state, {
-    set(target, key, value) {
-      target[key] = value;
-      validateForm();
-      setTimeout(() => render(), 0);
-      return true;
-    },
-  });
+  const setState = (newState) => {
+    state = { ...state, ...newState };
+    validateForm();
+    setTimeout(() => {
+      // Llamar a render() si está definido en tu aplicación
+      if (typeof render === 'function') {
+        render();
+      } else {
+        console.error('La función render no está definida.');
+      }
+    }, 0);
+  };
   
   const validateForm = () => {
     state.errors.nombreUsuario = '';
@@ -25,7 +29,7 @@ const state = {
     }
   };
   
-  const getState = () => state;
+  const getState = () => ({ ...state });
   
   export { setState, getState, validateForm };
   

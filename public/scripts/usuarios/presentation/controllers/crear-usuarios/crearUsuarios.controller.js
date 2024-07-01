@@ -10,7 +10,7 @@ const datasource = new UsuariosDatasource(baseUrl);
 const usuarioRepository = new UsuariosRepository(datasource);
 const crearUsuarioUseCase = new CrearUsuarioUseCase(usuarioRepository);
 
-const UsuariosController = {
+const CrearUsuariosController = {
   async crearUsuario({ nombreUsuario, recoveryKey }) {
     try {
       setState.isSubmitting = true;
@@ -24,16 +24,6 @@ const UsuariosController = {
     }
   },
 
-  async obtenerUsuarioPorId(req, res) {
-    const usuarioId = req.params.usuario_id;
-
-    try {
-      // Aquí se incluiría también ObtenerUsuarioPorIdUseCase si se necesita
-    } catch (error) {
-      console.error(`Error al obtener usuario con ID ${usuarioId}:`, error);
-      res.status(404).json({ error: 'Usuario no encontrado' });
-    }
-  }
 };
 
-export default UsuariosController;
+export default CrearUsuariosController;

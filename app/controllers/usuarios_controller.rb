@@ -33,6 +33,31 @@ class UsuariosController < Sinatra::Base
     erb :usuario_detalle
   end
 
+  get '/usuarios/nombre/:nombre_usuario' do
+    begin
+      nombre_usuario = params[:nombre_usuario]
+      usuario = @usuarios_service.obtener_usuario_por_nombre(nombre_usuario)
+      
+      if usuario
+        status 200
+        json mensaje: 'Usuario encontrado', encontrado: true, usuario: {
+          nombre_usuario: usuario.nombre_usuario,
+          fecha_creacion: usuario.fecha_creacion
+        }
+      else
+        status 200
+        json mensaje: 'Usuario no encontrado', encontrado: false
+      end
+    rescue PG::ConnectionBad => e
+      status 500
+      json mensaje: "Error de conexión con la base de datos: #{e.message}"
+    rescue => e
+      status 500
+      json mensaje: "Error desconocido al obtener usuario: #{e.message}"
+    end
+  end
+  
+
   post '/usuarios/authenticate' do
     request.body.rewind
     data = JSON.parse(request.body.read)

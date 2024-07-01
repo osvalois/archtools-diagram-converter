@@ -1,4 +1,5 @@
-import UsuariosController from '../../controllers/crear-usuarios/crearUsuarios.controller.js';
+import CrearUsuariosController from '../../controllers/crear-usuarios/crearUsuarios.controller.js';
+import ValidarDatosUsuarioController from '../../controllers/iniciar-sesion/validarDatosUsuario.controller.js';
 import LogoComponent from '../../../../core/presentation/components/general/logo.component.js';
 import IconInputTextComponent from '../../../../core/presentation/components/inputs/icon/iconInputText.component.js';
 import FormButtonComponent from '../../../../core/presentation/components/buttons/formButton.component.js';
@@ -6,22 +7,19 @@ import { setState, getState } from '../../controllers/crear-usuarios/crearUsuari
 import CardInformacionRegistro from '../../components/usuarios/cardInformacionRegistro.component.js';
 
 function FormularioCrearUsuarioView() {
-  const state = getState();
-
-
+  let state = getState();
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
     try {
       // Generar recoveryKey basado en el nombre de usuario
-      var encrypted = CryptoJS.AES.encrypt(state.nombreUsuario, "myPassword");
-      var decrypted = CryptoJS.AES.decrypt(encrypted, "myPassword");
-      console.log("encrypted")
-      console.log(encrypted)
-      const usuario = await UsuariosController.crearUsuario({
+      const encrypted = CryptoJS.AES.encrypt(state.nombreUsuario, "myPassword").toString();
+      console.log("encryptedString:", encrypted);
+
+      const usuario = await CrearUsuariosController.crearUsuario({
         nombreUsuario: state.nombreUsuario,
-        recoveryKey: encrypted
+        recoveryKey: encrypted,
       });
 
       console.log('Usuario creado:', usuario);
@@ -31,7 +29,28 @@ function FormularioCrearUsuarioView() {
       alert('Error al crear usuario');
     }
   };
+
+  const handleUsuarioInputChange = async (event) => {
+    const nombreUsuario = event.target.value;
+    setState({ ...state, nombreUsuario });
+
+    try {
+      const usuario = await ValidarDatosUsuarioController.consultarUsuarioPorNombre(nombreUsuario);
+      
+      console.log('Usuario consultado:', usuario);
+      if (usuario) {
+        setState({ ...state, errors: { ...state.errors, nombreUsuario: 'El nombre de usuario ya existe.' } });
+      } else {
+        setState({ ...state, errors: { ...state.errors, nombreUsuario: '' } });
+      }
+    } catch (error) {
+      console.error('Error al consultar usuario:', error);
+    }
+  };
+
   const render = () => {
+    state = getState(); // Actualizar el estado al renderizar
+
     // Datos específicos para Pingendata
     const cardTitle = "¿Qué es Pingendata?";
     const cardDescription = `
@@ -58,6 +77,9 @@ function FormularioCrearUsuarioView() {
                           value: state.nombreUsuario,
                           placeholder: 'Username',
                           identifier: 'nombreUsuario',
+                          ariaLabel: state.errors.nombreUsuario,
+                          inputBorderColor: state.inputBorderColor,
+                          arialLabelColor: state.errors.nombreUsuario ? 'text-red-500' : '',
                           className: 'mb-2'
                         })}
                         <div class="text-red-500 text-xs mt-1">${state.errors.nombreUsuario}</div>
@@ -99,7 +121,7 @@ function FormularioCrearUsuarioView() {
     const formElement = container.querySelector('#crearUsuarioForm');
     if (formElement) {
       formElement.addEventListener('submit', handleFormSubmit);
-      container.querySelector('#nombreUsuario').addEventListener('input', (e) => setState.nombreUsuario = e.target.value);
+      container.querySelector('#nombreUsuario').addEventListener('input', handleUsuarioInputChange);
     }
 
     return container;
