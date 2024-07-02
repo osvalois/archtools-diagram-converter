@@ -1,4 +1,13 @@
-// themes.datasource.js
+
+export const getThemeColors = (theme) => {
+    const colors = theme === 'dark' ? darkThemeColors : lightThemeColors;
+    return {
+        inputBackground: colors.inputBackground,
+        inputText: colors.inputText,
+        focusRing: colors.focusRing,
+        focusBorder: colors.focusBorder
+    };
+};
 
 // Definición de colores para el tema claro
 export const lightThemeColors = {
