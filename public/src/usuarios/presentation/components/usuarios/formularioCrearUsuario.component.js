@@ -33,11 +33,11 @@ export class FormularioCrearUsuarioComponent {
         this.element.innerHTML = `
             <form id="crearUsuarioForm" class="mt-4">
                 <p class="mb-4 text-gray-600">Por favor, registra una cuenta</p>
-                <div class="relative mb-4" data-twe-input-wrapper-init>
+                <div class="relative mb-1" data-twe-input-wrapper-init>
                     <div id="input-user-name"></div>
                     <div class="text-red-500 text-xs mt-1">${state.errors.crearUsuario}</div>
                 </div>
-                <div class="mb-4 pb-1 pt-1 text-center">
+                <div class="mb-1 pb-1 pt-1 text-center">
                     <div id="button-submit-form"></div>
                 </div>
             </form>

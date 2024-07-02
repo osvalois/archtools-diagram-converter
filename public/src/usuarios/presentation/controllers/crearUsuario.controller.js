@@ -5,6 +5,7 @@ export class CrearUsuarioController {
         this.store = store;
         this.usuarioService = usuarioService;
         this.initState();
+        this.debounceTimeout = null; // Añadimos una propiedad para almacenar el timeout de debounce
     }
 
     initState() {
@@ -18,8 +19,25 @@ export class CrearUsuarioController {
         });
     }
 
+    debounce(func, delay) {
+        return (...args) => {
+            clearTimeout(this.debounceTimeout);
+            this.debounceTimeout = setTimeout(() => func.apply(this, args), delay);
+        };
+    }
+
     async handleInput(nombreUsuario) {
         this.store.setState({ nombreUsuario, loading: true });
+
+        // Validación de longitud mínima
+        if (nombreUsuario.length < 5) {
+            this.store.setState({
+                isError: true,
+                errors: { crearUsuario: 'El nombre de usuario debe tener al menos 5 caracteres.' },
+                loading: false
+            });
+            return;
+        }
 
         try {
             const usuario = await this.usuarioService.consultarUsuarioPorNombre(nombreUsuario);
@@ -40,12 +58,14 @@ export class CrearUsuarioController {
         } catch (error) {
             this.store.setState({
                 isError: true,
-                errors: { crearUsuario: 'Error al consultar usuario:', error }
+                errors: { crearUsuario: 'Error al consultar usuario: ' + error }
             });
         } finally {
             this.store.setState({ loading: false });
         }
     }
+
+    handleInputDebounced = this.debounce(this.handleInput, 300); // Creamos una versión debounced del método handleInput
 
     async handleSubmit(nombreUsuario) {
         const state = this.store.getState();
